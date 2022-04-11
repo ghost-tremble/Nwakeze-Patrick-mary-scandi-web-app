@@ -27,6 +27,7 @@ export const GlobalStyles = createGlobalStyle`
     padding:0;
     box-sizing:border-box;
     color:#1D1F22;
+    
 
     
 }
@@ -35,7 +36,8 @@ body{
         color:#1D1F22;
     width:100vw;
     overflow-x:hidden;
-   
+   font-family: 'Raleway';
+font-style: normal;
     
     
     color:${(props) => props.theme.secondary}

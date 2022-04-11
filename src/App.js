@@ -4,6 +4,7 @@ import Category from './components/Category';
 import Header from './components/Header';
 import Cart from './components/cart/Cart';
 import './_app.css';
+import ProductPage from './pages/ProductPage';
 class App extends PureComponent {
   // constructor(props) {
   //   super(props);
@@ -22,7 +23,8 @@ class App extends PureComponent {
           {/* <Cart /> */}
         </div>
 
-        <Category />
+        {/* <Category /> */}
+        {/* <ProductPage /> */}
       </>
     );
   }

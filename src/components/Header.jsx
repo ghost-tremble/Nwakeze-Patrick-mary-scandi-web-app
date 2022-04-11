@@ -119,7 +119,7 @@ const IconButton = styled.div`
 
 const ItemCount = styled.div`
   position: absolute;
-  right: 107px;
+  right: 112.5px;
   top: 31.25%;
   bottom: 43.75%;
   width: 20px;
