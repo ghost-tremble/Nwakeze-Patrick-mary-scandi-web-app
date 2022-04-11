@@ -2,7 +2,7 @@ import {
   applyMiddleware,
   createStore,
 } from 'redux';
-import { rootReducer } from './reducers/rootReducer';
+import rootReducer from './rootReducer';
 
 import logger from 'redux-logger';
 
