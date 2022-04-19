@@ -1,34 +1,90 @@
 import { Component } from 'react';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 class ProductPage extends Component {
+  constructor(props) {
+    super(props);
+    const { products } =
+      this.props.productItems.category;
+    const productId = this.props.match.params.id;
+    const productData = products.filter(
+      (product) => product.id === productId
+    );
+    this.state = {
+      productData: productData,
+      index: 0,
+    };
+  }
   render() {
+    // productData
+
+    const productData = this.state.productData[0];
+    console.log(productData);
     return (
       <Container>
         <Section marginRight={'20px'} width={''}>
-          <div className="select-image"></div>
-          <div className="select-image"></div>
-          <div className="select-image" />
+          {productData.gallery.map(
+            (item, index) => {
+              return (
+                <SelectImage
+                  key={index}
+                  onClick={() =>
+                    this.setState({
+                      ...this.state,
+                      index: index,
+                    })
+                  }>
+                  <img
+                    src={item}
+                    className="image"
+                    alt="product"
+                  />
+                </SelectImage>
+              );
+            }
+          )}
         </Section>
         <Section
           marginRight={'100px'}
           width={'610px'}
-          background="#000"></Section>
+          background="#000">
+          <Image
+            src={
+              productData.gallery[
+                this.state.index
+              ]
+            }
+          />
+        </Section>
         <Section
           marginRight={'20px'}
           width={'292px'}>
           <div className="productName">
-            <h2>Apollo</h2>
-            <p>Running Shorts</p>
+            <h2>{productData.brand}</h2>
+            <p>{productData.name}</p>
           </div>
-          <div className="size-selection">
-            <h3>SIZE:</h3>
-            <div className="box-container">
-              <Box>xs</Box>
-              <Box>S</Box>
-              <Box>M</Box>
-              <Box>L</Box>
-            </div>
-          </div>
+          {productData.attributes.map(
+            (attribute) => {
+              return (
+                <div className="attribute-selection">
+                  <h3>SIZE:</h3>
+
+                  <div className="box-container">
+                    {attribute.items.map(
+                      (attribute, index) => {
+                        return (
+                          <Box key={index}>
+                            {attribute.value}
+                          </Box>
+                        );
+                      }
+                    )}
+                  </div>
+                </div>
+              );
+            }
+          )}
 
           <div className="price">
             <h3>PRICE:</h3>
@@ -56,7 +112,15 @@ class ProductPage extends Component {
   }
 }
 
-export default ProductPage;
+const MapStateToProps = (state) => {
+  return {
+    productItems: state.inventory.catalog,
+  };
+};
+
+export default withRouter(
+  connect(MapStateToProps)(ProductPage)
+);
 
 const Container = styled.div`
   height: 100vh;
@@ -72,13 +136,7 @@ const Section = styled.div`
   height: 32em;
   width: ${(props) => props.width || '200px'};
   margin-right: ${(props) => props.marginRight};
-  .select-image {
-    border: 1px solid red;
-    background-color:#eef;
-    width: 176.65px;
-    height: 87.61px;
-    margin: 0px 0px 32px 0px;
-  }
+  
   .productName {
     margin-bottom: 43px;
   }
@@ -93,7 +151,7 @@ const Section = styled.div`
     font-size: 30px;
     line-height: 27px;
   }
-  .size-selection {
+  .attribute-selection {
     display: flex;
     flex-direction: column;
     margin-bottom: 40px;
@@ -187,4 +245,23 @@ const Button = styled.div`
   text-align: center;
   text-transform: uppercase;
   cursor: pointer;
+`;
+
+const SelectImage = styled.div`
+  cursor: pointer;
+  width: 176.65px;
+  height: 87.61px;
+  margin: 0px 0px 32px 0px;
+
+  .image {
+    width: 176.65px;
+    height: 87.61px;
+    object-fit: cover;
+  }
+`;
+
+const Image = styled.img`
+  width: 610px;
+  object-fit: cover;
+  height: 32em;
 `;

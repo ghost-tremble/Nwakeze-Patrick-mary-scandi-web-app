@@ -6,57 +6,31 @@ import styled, {
   ThemeProvider,
 } from 'styled-components';
 import App from './App';
-
+import category, {
+  categories,
+} from './graphql/queries';
 import {
-  ApolloClient,
-  InMemoryCache,
-  ApolloProvider,
-  useQuery,
-  gql,
-} from '@apollo/client';
+  fetchCatalog,
+  fetchCategories,
+} from './redux/reducers/inventory/inventory.action';
 import {
   GlobalStyles,
   lightTheme,
 } from './Theme.config';
-
-const client = new ApolloClient({
-  uri: 'http://localhost:4000/',
-  cache: new InMemoryCache(),
-});
+import client from './graphql/client';
 client
   .query({
-    query: gql`
-      {
-        product(id: "huarache-x-stussy-le") {
-          name
-          inStock
-          gallery
-          description
-          category
-          brand
-        }
-      }
-    `,
+    query: category,
+    variables: { category: 'all' },
   })
-  .then((result) => console.log(result));
-// client
-//   .query({
-//     query: {
-//       query: gql`
-//         query {
-//           product(id: "huarache-x-stussy-le") {
-//             name
-//             inStock
-//             gallery
-//             description
-//             category
-//             brand
-//           }
-//         }
-//       `,
-//     },
-//   })
-//   .then((results) => console.log(results));
+  .then((result) =>
+    store.dispatch(fetchCatalog(result.data))
+  );
+client
+  .query({ query: categories })
+  .then((result) =>
+    store.dispatch(fetchCategories(result.data))
+  );
 
 ReactDOM.render(
   <React.StrictMode>

@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import { ReactComponent as CartIcon } from '../assets/add-cart.svg';
 // single Product Item
 class ProductItem extends Component {
@@ -8,18 +9,20 @@ class ProductItem extends Component {
   // }
 
   render() {
-    const stock = 1;
+    const { name, image, stock, productLink } =
+      this.props;
     return (
       <>
         <Container
-          opacity={stock >= 1 ? '1' : '0.5'}>
+          to={productLink}
+          opacity={stock ? '1' : '0.5'}>
           <div className="imageCard">
             <ImageContainer>
-              <Image />
+              <Image src={image} />
 
               <OutofStock
                 displayType={
-                  stock >= 1 ? 'none' : 'flex'
+                  stock ? 'none' : 'flex'
                 }>
                 OUT OF STOCK
               </OutofStock>
@@ -32,7 +35,7 @@ class ProductItem extends Component {
             </AddCart>
           </div>
           <Details>
-            <H1>{'Name'}</H1>
+            <H1>{name}</H1>
             <P>{'price'}</P>
           </Details>
         </Container>
@@ -43,7 +46,7 @@ class ProductItem extends Component {
 
 export default ProductItem;
 
-const Container = styled.div`
+const Container = styled(Link)`
   padding: 16px;
   width: 24.125rem;
   height: 27.75rem;
@@ -51,6 +54,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   cursor: pointer;
+  text-decoration: none;
   opacity: ${(props) => props.opacity};
   transition: opacity 0.3s;
   &:hover {
@@ -82,7 +86,10 @@ const ImageContainer = styled.div`
   display: flex;
   align-items: center;
 `;
-const Image = styled.img``;
+const Image = styled.img`
+  width: 22.25em;
+  height: 21.125em;
+`;
 const Details = styled.div``;
 const H1 = styled.h1`
   font-family: 'Raleway';

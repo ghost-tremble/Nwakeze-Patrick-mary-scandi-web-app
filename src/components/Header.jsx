@@ -1,23 +1,43 @@
 import { Component } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import { ReactComponent as LogoImage } from '../assets/headerIcons/shop-logo.svg';
 import { ReactComponent as Currency } from '../assets/headerIcons/currency.svg';
 import { ReactComponent as CartIcon } from '../assets/headerIcons/cart.svg';
+import { withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+
 class Header extends Component {
+  constructor(props) {
+    super(props);
+    console.log(props);
+  }
+
   render() {
+    const { categories, location } = this.props;
+
     return (
       <Container>
         <div>
           <Ul>
-            <LI active={true}>
-              <Button active={true}>WOMEN</Button>
-            </LI>
-            <LI>
-              <Button>MEN</Button>
-            </LI>
-            <LI>
-              <Button>KIDS</Button>
-            </LI>
+            {categories.categories.map(
+              (item, index) => {
+                const isActive = location.pathname
+                  .toLowerCase()
+                  .includes(item.name);
+
+                return (
+                  <LI
+                    to={`/${item.name}`}
+                    $active={isActive}
+                    key={index}>
+                    <Button $active={isActive}>
+                      {item.name}
+                    </Button>
+                  </LI>
+                );
+              }
+            )}
           </Ul>
         </div>
         <div
@@ -42,7 +62,15 @@ class Header extends Component {
     );
   }
 }
-export default Header;
+const mapStateToProps = (state) => {
+  return {
+    categories: state.inventory.categories,
+  };
+};
+
+export default withRouter(
+  connect(mapStateToProps)(Header)
+);
 
 const Container = styled.div`
   display: flex;
@@ -56,7 +84,9 @@ const Ul = styled.ul`
   list-style: none;
   display: flex;
 `;
-const LI = styled.li``;
+const LI = styled(Link)`
+  text-decoration: none;
+`;
 const Button = styled.button`background:transparent; outline:none;border:none;
  border 1px solid transparent;
  padding:32px;
@@ -65,7 +95,7 @@ const Button = styled.button`background:transparent; outline:none;border:none;
  font-family: 'Raleway';
 font-style: normal;
 font-weight: ${(props) =>
-  props.active
+  props.$active
     ? props.theme.semiBold
     : props.theme.regular};
 font-size: 16px;
@@ -83,12 +113,12 @@ margin: 30px 0px;
 
     
  border-bottom : 2px solid ${(props) =>
-   props.active
+   props.$active
      ? props.theme.primary
      : 'transparent'};
 
 color : ${(props) =>
-  props.active
+  props.$active
     ? props.theme.primary
     : props.theme.secondary} ;
  &:hover {

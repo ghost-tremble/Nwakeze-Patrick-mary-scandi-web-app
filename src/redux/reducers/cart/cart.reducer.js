@@ -1,5 +1,4 @@
 //reducer
-
 const initialState = {
   hidden: true,
   cartItems: [],
