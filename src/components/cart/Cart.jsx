@@ -1,12 +1,16 @@
 import { Component } from 'react';
 import styled from 'styled-components';
+import { createStructuredSelector } from 'reselect';
 import CartItem from './Cartitem';
-
+import { connect } from 'react-redux';
+import { selectCartHidden } from '../../redux/reducers/cart/cart.selector';
 // cart for showing products
 class Cart extends Component {
   render() {
+    const { hidden } = this.props;
+    console.log(hidden);
     return (
-      <CartOverlay>
+      <CartOverlay hidden={hidden}>
         <Container>
           <div>
             <H2>
@@ -73,13 +77,20 @@ class Cart extends Component {
   }
 }
 
-export default Cart;
+const MapStateToProps = (state) => {
+  return createStructuredSelector({
+    hidden: selectCartHidden,
+  });
+};
+export default connect(MapStateToProps)(Cart);
 
 const CartOverlay = styled.div`
   position: absolute;
   top: 4.9rem;
   height: 100vh;
   width: 100%;
+  display: ${(props) =>
+    props.hidden ? 'none' : 'block'};
   background-color: rgba(57, 55, 72, 0.22);
 `;
 const Container = styled.div`

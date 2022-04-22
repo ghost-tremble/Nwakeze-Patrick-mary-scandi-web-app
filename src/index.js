@@ -8,17 +8,21 @@ import styled, {
 import App from './App';
 import category, {
   categories,
+  currencies,
 } from './graphql/queries';
 import {
   fetchCatalog,
   fetchCategories,
+  updateLoadingState,
 } from './redux/reducers/inventory/inventory.action';
 import {
   GlobalStyles,
   lightTheme,
 } from './Theme.config';
 import client from './graphql/client';
-client
+import { fetchCurrecies } from './redux/reducers/currency/currency.action';
+
+const c = client
   .query({
     query: category,
     variables: { category: 'all' },
@@ -26,11 +30,20 @@ client
   .then((result) =>
     store.dispatch(fetchCatalog(result.data))
   );
-client
+const b = client
   .query({ query: categories })
   .then((result) =>
     store.dispatch(fetchCategories(result.data))
   );
+const a = client
+  .query({ query: currencies })
+  .then((result) =>
+    store.dispatch(fetchCurrecies(result.data))
+  );
+
+Promise.all([a, b, c]).then(() =>
+  store.dispatch(updateLoadingState(false))
+);
 
 ReactDOM.render(
   <React.StrictMode>

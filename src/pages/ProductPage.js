@@ -11,11 +11,29 @@ class ProductPage extends Component {
     const productData = products.filter(
       (product) => product.id === productId
     );
+    const productAttributes =
+      productData[0].attributes.map(
+        (attribute, index) => {
+          if (
+            Object.keys(attribute)[index] ===
+            'name'
+          ) {
+            const props = [];
+            props.push(attribute.name);
+            console.log(props);
+            return props;
+          }
+          return null;
+        }
+      );
+    console.log(productAttributes);
     this.state = {
       productData: productData,
       index: 0,
+      attributeSelected: 'none',
     };
   }
+
   render() {
     // productData
 
@@ -48,7 +66,7 @@ class ProductPage extends Component {
         <Section
           marginRight={'100px'}
           width={'610px'}
-          background="#000">
+          background="#fff">
           <Image
             src={
               productData.gallery[
@@ -65,18 +83,48 @@ class ProductPage extends Component {
             <p>{productData.name}</p>
           </div>
           {productData.attributes.map(
-            (attribute) => {
+            (attr, index) => {
               return (
-                <div className="attribute-selection">
-                  <h3>SIZE:</h3>
+                <div
+                  key={index}
+                  className="attribute-selection">
+                  <h3>{attr.name}</h3>
 
                   <div className="box-container">
-                    {attribute.items.map(
+                    {attr.items.map(
                       (attribute, index) => {
                         return (
-                          <Box key={index}>
-                            {attribute.value}
-                          </Box>
+                          <>
+                            {attr.type ===
+                            'swatch' ? (
+                              <Box
+                                key={index}
+                                background={
+                                  attribute.value
+                                }></Box>
+                            ) : (
+                              <Box
+                                onClick={() =>
+                                  this.setState({
+                                    ...this.state,
+                                    attributeSelected:
+                                      {
+                                        name: '',
+                                      },
+                                  })
+                                }
+                                key={index}
+                                $selected={
+                                  attribute.value ===
+                                  this.state
+                                    .attributeSelected
+                                    ? true
+                                    : false
+                                }>
+                                {attribute.value}
+                              </Box>
+                            )}
+                          </>
                         );
                       }
                     )}
@@ -88,7 +136,18 @@ class ProductPage extends Component {
 
           <div className="price">
             <h3>PRICE:</h3>
-            <h4>$50.00</h4>
+            {productData.prices
+              .filter(
+                (item) =>
+                  item.currency.symbol ===
+                  this.props.currentCurrency
+              )
+              .map((item, index) => (
+                <h4 key={index}>
+                  {item.currency.symbol}
+                  {item.amount}
+                </h4>
+              ))}
           </div>
           <Button
             color="#ffffff"
@@ -115,6 +174,8 @@ class ProductPage extends Component {
 const MapStateToProps = (state) => {
   return {
     productItems: state.inventory.catalog,
+    currentCurrency:
+      state.currency.currentCurrency,
   };
 };
 
@@ -214,8 +275,12 @@ const Box = styled.div`
   line-height: 112%;
   letter-spacing: 0.05em;
   cursor: pointer;
+  color: ${(props) =>
+    props.$selected ? '#FFFFFF' : '#000000'};
   background: ${(props) =>
-    props.background || props.selected};
+    props.$selected
+      ? '#000000'
+      : props.background};
 `;
 const Button = styled.div`
   display: flex;
@@ -256,12 +321,12 @@ const SelectImage = styled.div`
   .image {
     width: 176.65px;
     height: 87.61px;
-    object-fit: cover;
+    object-fit: contain;
   }
 `;
 
 const Image = styled.img`
   width: 610px;
-  object-fit: cover;
+  object-fit: contain;
   height: 32em;
 `;

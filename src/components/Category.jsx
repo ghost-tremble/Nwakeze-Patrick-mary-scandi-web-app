@@ -37,6 +37,7 @@ class Category extends Component {
                 gallery,
                 inStock,
                 id,
+                prices,
               }) => {
                 return (
                   <ProductItem
@@ -46,6 +47,7 @@ class Category extends Component {
                     name={name}
                     image={gallery[0]}
                     stock={inStock}
+                    prices={prices}
                   />
                 );
               }

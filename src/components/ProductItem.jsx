@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import { ReactComponent as CartIcon } from '../assets/add-cart.svg';
 // single Product Item
 class ProductItem extends Component {
@@ -9,8 +10,13 @@ class ProductItem extends Component {
   // }
 
   render() {
-    const { name, image, stock, productLink } =
-      this.props;
+    const {
+      name,
+      image,
+      stock,
+      productLink,
+      prices,
+    } = this.props;
     return (
       <>
         <Container
@@ -36,15 +42,37 @@ class ProductItem extends Component {
           </div>
           <Details>
             <H1>{name}</H1>
-            <P>{'price'}</P>
+            <P>
+              {' '}
+              {prices
+                .filter(
+                  (item) =>
+                    item.currency.symbol ===
+                    this.props.currentCurrency
+                )
+                .map((item) => (
+                  <h4>
+                    {item.currency.symbol}
+                    {item.amount}
+                  </h4>
+                ))}
+            </P>
           </Details>
         </Container>
       </>
     );
   }
 }
+const MapStateToProps = (state) => {
+  return {
+    currentCurrency:
+      state.currency.currentCurrency,
+  };
+};
 
-export default ProductItem;
+export default connect(MapStateToProps)(
+  ProductItem
+);
 
 const Container = styled(Link)`
   padding: 16px;

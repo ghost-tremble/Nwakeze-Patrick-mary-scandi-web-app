@@ -1,11 +1,15 @@
 import { Component } from 'react';
 import { Link } from 'react-router-dom';
+import { createStructuredSelector } from 'reselect';
 import styled from 'styled-components';
 import { ReactComponent as LogoImage } from '../assets/headerIcons/shop-logo.svg';
 import { ReactComponent as Currency } from '../assets/headerIcons/currency.svg';
 import { ReactComponent as CartIcon } from '../assets/headerIcons/cart.svg';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { toggleOpenCurrecies } from '../redux/reducers/currency/currency.action';
+import { toggleCartHidden } from '../redux/reducers/cart/cart.actions';
+import { selectCartItemsCount } from '../redux/reducers/cart/cart.actions';
 
 class Header extends Component {
   constructor(props) {
@@ -14,6 +18,7 @@ class Header extends Component {
   }
 
   render() {
+    console.log(this.props);
     const { categories, location } = this.props;
 
     return (
@@ -25,7 +30,6 @@ class Header extends Component {
                 const isActive = location.pathname
                   .toLowerCase()
                   .includes(item.name);
-
                 return (
                   <LI
                     to={`/${item.name}`}
@@ -50,10 +54,14 @@ class Header extends Component {
           </IconButton>
         </div>
         <IconGroup>
-          <IconButton>
+          <IconButton
+            onClick={() =>
+              this.props.showCurrency()
+            }>
             <Currency />
           </IconButton>
-          <IconButton>
+          <IconButton
+            onClick={() => this.props.showCart()}>
             <CartIcon />
             <ItemCount>3</ItemCount>
           </IconButton>
@@ -62,14 +70,26 @@ class Header extends Component {
     );
   }
 }
-const mapStateToProps = (state) => {
+const MapStateToProps = (state) => {
   return {
     categories: state.inventory.categories,
+    cartSize: createStructuredSelector(
+      selectCartItemsCount
+    ),
   };
 };
-
+const MapDispatchToProps = (dispatch) => {
+  return {
+    showCurrency: () =>
+      dispatch(toggleOpenCurrecies()),
+    showCart: () => dispatch(toggleCartHidden()),
+  };
+};
 export default withRouter(
-  connect(mapStateToProps)(Header)
+  connect(
+    MapStateToProps,
+    MapDispatchToProps
+  )(Header)
 );
 
 const Container = styled.div`

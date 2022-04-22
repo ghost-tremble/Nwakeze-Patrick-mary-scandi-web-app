@@ -21,6 +21,7 @@ import Cart from './components/cart/Cart';
 import './_app.css';
 import client from './graphql/client';
 import ProductPage from './pages/ProductPage';
+import Currency from './components/Currency';
 class App extends PureComponent {
   render() {
     const { isLoading, categories } = this.props;
@@ -40,7 +41,8 @@ class App extends PureComponent {
                   zIndex: '100',
                 }}>
                 <Header />
-                {/* <Cart /> */}
+                <Cart />
+                <Currency />
               </div>
             </Route>
             <Switch>
@@ -63,6 +65,7 @@ class App extends PureComponent {
               {categories.categories.map(
                 (item, index) => (
                   <Route
+                    key={index}
                     path={`/${item.name}/:id`}>
                     <ProductPage />
                   </Route>
