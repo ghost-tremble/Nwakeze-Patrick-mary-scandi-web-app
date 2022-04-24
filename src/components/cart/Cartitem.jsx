@@ -4,12 +4,25 @@ import { getCurrentCurrency } from '../../utils/getCurrentCurrency';
 import { connect } from 'react-redux';
 import { ReactComponent as Plus } from '../../assets/plus.svg';
 import { ReactComponent as Minus } from '../../assets/minus.svg';
+import {
+  Box,
+  Div,
+  Attributes,
+} from '../styledComponents/components';
 class CartItem extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedAttributes:
+        this.props.selectedAttributes,
+    };
+  }
   render() {
     const {
       name,
       brand,
       image,
+      attributes,
       prices,
       quantity,
       addItem,
@@ -63,13 +76,104 @@ class CartItem extends Component {
               )}
             </h3>
           </div>
-          <div
+          <Attributes
             style={{
               display: 'flex',
             }}>
-            <Box marginRight="8px">S</Box>
-            <Box background="#A6A6A6">M</Box>
-          </div>
+            {attributes.map((attr, index) => {
+              return (
+                <div
+                  key={index}
+                  className="attribute-selection">
+                  <h3>{attr.name}:</h3>
+
+                  <div className="box-container">
+                    {attr.items.map(
+                      (attribute, index) => {
+                        return (
+                          <>
+                            {attr.type ===
+                            'swatch' ? (
+                              <Div
+                                height="20px"
+                                width="20px"
+                                $highlight={
+                                  this.state
+                                    .selectedAttributes[
+                                    attr.name
+                                  ] ===
+                                  attribute.value
+                                    ? true
+                                    : false
+                                }>
+                                <Box
+                                  border="none"
+                                  key={index}
+                                  background={
+                                    attribute.value
+                                  }
+                                  height="16px"
+                                  width="16px"
+                                  marginRight="0px"
+                                  onClick={() => {
+                                    this.setState(
+                                      {
+                                        ...this
+                                          .state,
+                                        selectedAttributes:
+                                          {
+                                            ...this
+                                              .state
+                                              .selectedAttributes,
+
+                                            [attr.name]:
+                                              attribute.value,
+                                          },
+                                      }
+                                    );
+                                  }}></Box>
+                              </Div>
+                            ) : (
+                              <Box
+                                onClick={() =>
+                                  this.setState({
+                                    ...this.state,
+                                    selectedAttributes:
+                                      {
+                                        ...this
+                                          .state
+                                          .selectedAttributes,
+
+                                        [attr.name]:
+                                          attribute.value,
+                                      },
+                                  })
+                                }
+                                height="24px"
+                                width="max-width"
+                                minWidth="24px"
+                                key={index}
+                                $selected={
+                                  this.state
+                                    .selectedAttributes[
+                                    attr.name
+                                  ] ===
+                                  attribute.value
+                                    ? true
+                                    : false
+                                }>
+                                {attribute.value}
+                              </Box>
+                            )}
+                          </>
+                        );
+                      }
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </Attributes>
         </div>
         <div>
           {/*  image contsine*/}
@@ -127,6 +231,7 @@ class CartItem extends Component {
     );
   }
 }
+
 const MapStateToProps = (state) => {
   return {
     currentCurrency:
@@ -138,21 +243,4 @@ const Container = styled.div`
   display: flex;
   justify-content: space-between;
   margin: 0px 0px 2.75em 0px;
-`;
-const Box = styled.div`
-  border: 1px solid;
-  height: 2rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 2rem;
-  margin-right: ${(props) => props.marginRight};
-  font-family: 'Source Sans Pro';
-  font-style: normal;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 160%;
-  cursor: pointer;
-  background: ${(props) =>
-    props.background || props.selected};
 `;

@@ -64,9 +64,11 @@ class Header extends Component {
           <IconButton
             onClick={() => this.props.showCart()}>
             <CartIcon />
-            <ItemCount>
-              {cartSize.number}
-            </ItemCount>
+            {cartSize.number > 0 && (
+              <ItemCount>
+                {cartSize.number}
+              </ItemCount>
+            )}
           </IconButton>
         </IconGroup>
       </Container>

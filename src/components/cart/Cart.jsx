@@ -12,6 +12,8 @@ import {
   selectCartHidden,
   selectCartItems,
   selectCartItemsCount,
+  selectCartTotal,
+  selectCurrentCurrency,
 } from '../../redux/reducers/cart/cart.selector';
 import { toggleCartHidden } from '../../redux/reducers/cart/cart.actions';
 // cart for showing products
@@ -24,6 +26,8 @@ class Cart extends Component {
       cartSize,
       removeItem,
       addItem,
+      cartTotal,
+      currency,
     } = this.props;
     console.log(cartItems);
     return (
@@ -49,9 +53,11 @@ class Cart extends Component {
             {cartItems.map((item) => {
               const {
                 name,
+                selectedAttributes,
                 brand,
                 prices,
                 gallery,
+                attributes,
               } = item;
               console.log(gallery[0]);
               return (
@@ -60,8 +66,12 @@ class Cart extends Component {
                   brand={brand}
                   prices={prices}
                   image={gallery[0]}
+                  attributes={attributes}
                   quantity={item.quantity}
                   addItem={() => addItem(item)}
+                  selectedAttributes={
+                    selectedAttributes
+                  }
                   removeItem={() =>
                     removeItem(item)
                   }
@@ -95,7 +105,8 @@ class Cart extends Component {
                     fontSize: '16px',
                     lineHeight: '160%',
                   }}>
-                  ${'100'}
+                  {currency}
+                  {cartTotal}
                 </p>
               </div>
             </Total>
@@ -125,6 +136,8 @@ const MapStateToProps = (state) => {
     hidden: selectCartHidden,
     cartItems: selectCartItems,
     cartSize: selectCartItemsCount,
+    cartTotal: selectCartTotal,
+    currency: selectCurrentCurrency,
   });
 };
 const MapDispatchToProps = (dispatch) => {
@@ -157,6 +170,7 @@ const Container = styled.div`
   padding: 0.5rem 1rem 1.24rem;
   right: 87px;
   overflow-y: auto;
+  overflow-x: hidden;
 `;
 
 const H2 = styled.h2`

@@ -4,6 +4,10 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { addItem } from '../redux/reducers/cart/cart.actions';
 import { getCurrentCurrency } from '../utils/getCurrentCurrency';
+import {
+  Box,
+  Div,
+} from '../components/styledComponents/components';
 class ProductPage extends Component {
   constructor(props) {
     super(props);
@@ -69,6 +73,9 @@ class ProductPage extends Component {
             <h2>{productData.brand}</h2>
             <p>{productData.name}</p>
           </div>
+
+          {/*         
+        product attributes selection */}
           {productData.attributes.map(
             (attr, index) => {
               return (
@@ -295,30 +302,6 @@ const Section = styled.div`
   }
 `;
 
-const Box = styled.div`
-  border: ${(props) =>
-    props.border || '1px solid'};
-  height: ${(props) => props.height || '45px'};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: ${(props) => props.width || '63px'};
-  margin-right: ${(props) =>
-    props.marginRight || '10px'};
-  font-family: 'Source Sans Pro', sans-serif;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 112%;
-  letter-spacing: 0.05em;
-  cursor: pointer;
-  color: ${(props) =>
-    props.$selected ? '#FFFFFF' : '#000000'};
-  background: ${(props) =>
-    props.$selected
-      ? '#000000'
-      : props.background};
-`;
 const Button = styled.div`
   display: flex;
   flex-direction: column;
@@ -366,17 +349,4 @@ const Image = styled.img`
   width: 610px;
   object-fit: contain;
   height: 32em;
-`;
-
-const Div = styled.div`
-  border: ${(props) =>
-    props.$highlight
-      ? '1px solid #5ECE7B'
-      : '1px solid transparent'};
-  padding: 2px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 36px;
-  height: 36px;
 `;

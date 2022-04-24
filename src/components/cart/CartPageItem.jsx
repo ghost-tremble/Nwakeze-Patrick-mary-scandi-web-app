@@ -1,7 +1,34 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import { Attributes } from '../styledComponents/components';
+import {
+  Box,
+  Div,
+} from '../styledComponents/components';
+import { connect } from 'react-redux';
+import { getCurrentCurrency } from '../../utils/getCurrentCurrency';
+import { ReactComponent as Plus } from '../../assets/plus.svg';
+import { ReactComponent as Minus } from '../../assets/minus.svg';
+
 class CartPageItem extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedAttributes:
+        this.props.selectedAttributes,
+    };
+  }
   render() {
+    const {
+      name,
+      brand,
+      image,
+      attributes,
+      prices,
+      quantity,
+      addItem,
+      removeItem,
+    } = this.props;
     return (
       <Container>
         {' '}
@@ -13,52 +40,133 @@ class CartPageItem extends Component {
             <p
               style={{
                 fontFamily: 'Raleway',
-                fontSize: '30',
+                fontSize: '30px',
                 fontWeight: '700',
                 letterSpacing: '0px',
-                textAlign: 'left',
-                width: '136px',
+
                 marginBottom: '16px',
               }}>
-              Apollo
+              {brand}
             </p>
             <p
               style={{
                 fontFamily: 'Raleway',
                 fontStyle: 'normal',
-                fontWeight: 400,
+                fontWeight: '400',
                 fontSize: '30px',
                 lineHeight: '27px',
-                marginBottom: '12px',
+                marginBottom: '20px',
               }}>
-              Running Short
+              {name}
             </p>
             <h3
               style={{
                 fontFamily: 'Raleway',
-                fontSize: '16px',
-                fontWeight: '500px',
-                lineHeight: '26px',
+                fontSize: '24px',
+                fontWeight: '700px',
+                lineHeight: '24px',
 
                 letterSpacing: '0em',
               }}>
-              $50.00
+              {getCurrentCurrency(
+                prices,
+                this.props.currentCurrency
+              )}
             </h3>
           </div>
-          <div
+          <Attributes
             style={{
               display: 'flex',
             }}>
-            <Box marginRight="8px" width="63px">
-              S
-            </Box>
-            <Box
-              width="63px"
-              background="#000000"
-              color="#ffffff">
-              M
-            </Box>
-          </div>
+            {attributes.map((attr, index) => {
+              return (
+                <div
+                  key={index}
+                  className="attribute-selection">
+                  <h3>{attr.name}:</h3>
+
+                  <div className="box-container">
+                    {attr.items.map(
+                      (attribute, index) => {
+                        return (
+                          <>
+                            {attr.type ===
+                            'swatch' ? (
+                              <Div
+                                $highlight={
+                                  this.state
+                                    .selectedAttributes[
+                                    attr.name
+                                  ] ===
+                                  attribute.value
+                                    ? true
+                                    : false
+                                }>
+                                <Box
+                                  border="none"
+                                  key={index}
+                                  background={
+                                    attribute.value
+                                  }
+                                  height="32px"
+                                  width="32px"
+                                  marginRight="0px"
+                                  onClick={() => {
+                                    this.setState(
+                                      {
+                                        ...this
+                                          .state,
+                                        selectedAttributes:
+                                          {
+                                            ...this
+                                              .state
+                                              .selectedAttributes,
+
+                                            [attr.name]:
+                                              attribute.value,
+                                          },
+                                      }
+                                    );
+                                  }}></Box>
+                              </Div>
+                            ) : (
+                              <Box
+                                onClick={() =>
+                                  this.setState({
+                                    ...this.state,
+                                    selectedAttributes:
+                                      {
+                                        ...this
+                                          .state
+                                          .selectedAttributes,
+
+                                        [attr.name]:
+                                          attribute.value,
+                                      },
+                                  })
+                                }
+                                key={index}
+                                $selected={
+                                  this.state
+                                    .selectedAttributes[
+                                    attr.name
+                                  ] ===
+                                  attribute.value
+                                    ? true
+                                    : false
+                                }>
+                                {attribute.value}
+                              </Box>
+                            )}
+                          </>
+                        );
+                      }
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </Attributes>
         </div>
         <div>
           {/*  image contsine*/}
@@ -74,7 +182,12 @@ class CartPageItem extends Component {
                 justifyContent: 'space-between',
                 marginRight: '10px',
               }}>
-              <Box width="45px">-</Box>
+              <Minus
+                style={{
+                  cursor: 'pointer',
+                }}
+                onClick={() => removeItem()}
+              />
               <div
                 style={{
                   width: '24px',
@@ -83,16 +196,25 @@ class CartPageItem extends Component {
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}>
-                <h3>{'3'}</h3>
+                <h3>{quantity}</h3>
               </div>
-              <Box width="45px">+</Box>
+              <Plus
+                style={{
+                  cursor: 'pointer',
+                }}
+                onClick={() => addItem()}
+              />
             </div>
-            <div
-              style={{
-                width: '141px',
-                height: '185px',
-                border: '1px solid red',
-              }}></div>
+            <div>
+              <img
+                style={{
+                  width: '141px',
+                  height: '185px',
+                }}
+                src={image}
+                alt="slidercartimage"
+              />
+            </div>
           </div>
         </div>
       </Container>
@@ -100,32 +222,20 @@ class CartPageItem extends Component {
   }
 }
 
-export default CartPageItem;
+const MapStateToProps = (state) => {
+  return {
+    currentCurrency:
+      state.currency.currentCurrency,
+  };
+};
+export default connect(MapStateToProps)(
+  CartPageItem
+);
 
 const Container = styled.div`
   width: 1098px;
-  height: 186px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 20px;
-`;
-
-const Box = styled.div`
-  border: 1px solid;
-  height: 45px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: ${(props) => props.width};
-  margin-right: ${(props) => props.marginRight};
-  font-family: 'Source Sans Pro';
-  font-style: normal;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 160%;
-  cursor: pointer;
-  color: ${(props) => props.color};
-  background: ${(props) =>
-    props.background || props.selected};
 `;
