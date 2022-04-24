@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { ReactComponent as CartIcon } from '../assets/add-cart.svg';
+import { getCurrentCurrency } from '../utils/getCurrentCurrency';
 // single Product Item
 class ProductItem extends Component {
   // constructor(props) {
@@ -44,18 +45,12 @@ class ProductItem extends Component {
             <H1>{name}</H1>
             <P>
               {' '}
-              {prices
-                .filter(
-                  (item) =>
-                    item.currency.symbol ===
-                    this.props.currentCurrency
-                )
-                .map((item) => (
-                  <h4>
-                    {item.currency.symbol}
-                    {item.amount}
-                  </h4>
-                ))}
+              <h4>
+                {getCurrentCurrency(
+                  prices,
+                  this.props.currentCurrency
+                )}
+              </h4>
             </P>
           </Details>
         </Container>

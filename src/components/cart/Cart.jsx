@@ -3,12 +3,29 @@ import styled from 'styled-components';
 import { createStructuredSelector } from 'reselect';
 import CartItem from './Cartitem';
 import { connect } from 'react-redux';
-import { selectCartHidden } from '../../redux/reducers/cart/cart.selector';
+import { Link } from 'react-router-dom';
+import {
+  addItem,
+  removeItem,
+} from '../../redux/reducers/cart/cart.actions';
+import {
+  selectCartHidden,
+  selectCartItems,
+  selectCartItemsCount,
+} from '../../redux/reducers/cart/cart.selector';
+import { toggleCartHidden } from '../../redux/reducers/cart/cart.actions';
 // cart for showing products
 class Cart extends Component {
   render() {
-    const { hidden } = this.props;
-    console.log(hidden);
+    const {
+      hidden,
+      closeCart,
+      cartItems,
+      cartSize,
+      removeItem,
+      addItem,
+    } = this.props;
+    console.log(cartItems);
     return (
       <CartOverlay hidden={hidden}>
         <Container>
@@ -25,10 +42,32 @@ class Cart extends Component {
                   textAlign: 'right',
                   display: 'inline',
                 }}>
-                {'2'} items
+                {cartSize} items
               </h3>
             </H2>
-            <CartItem />
+
+            {cartItems.map((item) => {
+              const {
+                name,
+                brand,
+                prices,
+                gallery,
+              } = item;
+              console.log(gallery[0]);
+              return (
+                <CartItem
+                  name={name}
+                  brand={brand}
+                  prices={prices}
+                  image={gallery[0]}
+                  quantity={item.quantity}
+                  addItem={() => addItem(item)}
+                  removeItem={() =>
+                    removeItem(item)
+                  }
+                />
+              );
+            })}
 
             <Total>
               <div>
@@ -61,10 +100,14 @@ class Cart extends Component {
               </div>
             </Total>
             <ButtonContainer>
-              <Button margin="12px">
+              <Button
+                to="/cart"
+                onClick={() => closeCart()}
+                margin="12px">
                 VIEW BAG
               </Button>
               <Button
+                to="/checkout"
                 background="#5ECE7B"
                 color="#FFFFFF">
                 CHECK OUT
@@ -80,9 +123,22 @@ class Cart extends Component {
 const MapStateToProps = (state) => {
   return createStructuredSelector({
     hidden: selectCartHidden,
+    cartItems: selectCartItems,
+    cartSize: selectCartItemsCount,
   });
 };
-export default connect(MapStateToProps)(Cart);
+const MapDispatchToProps = (dispatch) => {
+  return {
+    closeCart: () => dispatch(toggleCartHidden()),
+    addItem: (data) => dispatch(addItem(data)),
+    removeItem: (data) =>
+      dispatch(removeItem(data)),
+  };
+};
+export default connect(
+  MapStateToProps,
+  MapDispatchToProps
+)(Cart);
 
 const CartOverlay = styled.div`
   position: absolute;
@@ -122,7 +178,7 @@ const ButtonContainer = styled.div`
   align-items: center;
   margin: 0px 0px 20px 0px;
 `;
-const Button = styled.div`
+const Button = styled(Link)`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -143,4 +199,6 @@ const Button = styled.div`
   font-size: 14px;
   line-height: 120%;
   cursor: pointer;
+
+  text-decoration: none;
 `;

@@ -71,6 +71,9 @@ class App extends PureComponent {
                   </Route>
                 )
               )}
+              <Route path="/cart">
+                <CartPage />
+              </Route>
             </Switch>
           </Router>
         )}

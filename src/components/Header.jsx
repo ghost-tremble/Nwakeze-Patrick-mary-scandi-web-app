@@ -9,7 +9,7 @@ import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { toggleOpenCurrecies } from '../redux/reducers/currency/currency.action';
 import { toggleCartHidden } from '../redux/reducers/cart/cart.actions';
-import { selectCartItemsCount } from '../redux/reducers/cart/cart.actions';
+import { selectCartItemsCount } from '../redux/reducers/cart/cart.selector';
 
 class Header extends Component {
   constructor(props) {
@@ -19,7 +19,8 @@ class Header extends Component {
 
   render() {
     console.log(this.props);
-    const { categories, location } = this.props;
+    const { categories, location, cartSize } =
+      this.props;
 
     return (
       <Container>
@@ -63,7 +64,9 @@ class Header extends Component {
           <IconButton
             onClick={() => this.props.showCart()}>
             <CartIcon />
-            <ItemCount>3</ItemCount>
+            <ItemCount>
+              {cartSize.number}
+            </ItemCount>
           </IconButton>
         </IconGroup>
       </Container>
@@ -73,9 +76,9 @@ class Header extends Component {
 const MapStateToProps = (state) => {
   return {
     categories: state.inventory.categories,
-    cartSize: createStructuredSelector(
-      selectCartItemsCount
-    ),
+    cartSize: createStructuredSelector({
+      number: selectCartItemsCount,
+    })(state),
   };
 };
 const MapDispatchToProps = (dispatch) => {

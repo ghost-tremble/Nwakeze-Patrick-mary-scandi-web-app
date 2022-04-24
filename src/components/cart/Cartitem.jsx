@@ -1,7 +1,20 @@
 import { Component } from 'react';
 import styled from 'styled-components';
+import { getCurrentCurrency } from '../../utils/getCurrentCurrency';
+import { connect } from 'react-redux';
+import { ReactComponent as Plus } from '../../assets/plus.svg';
+import { ReactComponent as Minus } from '../../assets/minus.svg';
 class CartItem extends Component {
   render() {
+    const {
+      name,
+      brand,
+      image,
+      prices,
+      quantity,
+      addItem,
+      removeItem,
+    } = this.props;
     return (
       <Container>
         <div style={{}}>
@@ -20,7 +33,20 @@ class CartItem extends Component {
                 width: '136px',
                 marginBottom: '5px',
               }}>
-              Apollo Running Short
+              {brand}
+            </p>
+            <p
+              style={{
+                fontFamily: 'Raleway',
+                fontSize: '16',
+                fontWeight: '300',
+                lineHeight: '26px',
+                letterSpacing: '0px',
+                textAlign: 'left',
+                width: '136px',
+                marginBottom: '5px',
+              }}>
+              {name}
             </p>
             <h3
               style={{
@@ -31,7 +57,10 @@ class CartItem extends Component {
 
                 letterSpacing: '0em',
               }}>
-              $50.00
+              {getCurrentCurrency(
+                prices,
+                this.props.currentCurrency
+              )}
             </h3>
           </div>
           <div
@@ -56,7 +85,12 @@ class CartItem extends Component {
                 justifyContent: 'space-between',
                 marginRight: '10px',
               }}>
-              <Box>-</Box>
+              <div
+                style={{
+                  cursor: 'pointer',
+                }}>
+                <Plus onClick={() => addItem()} />
+              </div>
               <div
                 style={{
                   width: '24px',
@@ -65,24 +99,41 @@ class CartItem extends Component {
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}>
-                <h3>{'3'}</h3>
+                <h3>{quantity}</h3>
               </div>
-              <Box>+</Box>
+              <div
+                style={{
+                  cursor: 'pointer',
+                }}>
+                <Minus
+                  onClick={() => removeItem()}
+                />
+              </div>
             </div>
-            <div
-              style={{
-                width: '6.6rem',
-                height: '8.9rem',
-                border: '1px solid red',
-              }}></div>
+            <div style={{}}>
+              <img
+                src={image}
+                style={{
+                  width: '6.6rem',
+                  height: '8.9rem',
+                  objectFit: 'contain',
+                }}
+                alt="cartimage"
+              />
+            </div>
           </div>
         </div>
       </Container>
     );
   }
 }
-
-export default CartItem;
+const MapStateToProps = (state) => {
+  return {
+    currentCurrency:
+      state.currency.currentCurrency,
+  };
+};
+export default connect(MapStateToProps)(CartItem);
 const Container = styled.div`
   display: flex;
   justify-content: space-between;

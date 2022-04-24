@@ -2,6 +2,8 @@ import { Component } from 'react';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import { addItem } from '../redux/reducers/cart/cart.actions';
+import { getCurrentCurrency } from '../utils/getCurrentCurrency';
 class ProductPage extends Component {
   constructor(props) {
     super(props);
@@ -11,34 +13,19 @@ class ProductPage extends Component {
     const productData = products.filter(
       (product) => product.id === productId
     );
-    const productAttributes =
-      productData[0].attributes.map(
-        (attribute, index) => {
-          if (
-            Object.keys(attribute)[index] ===
-            'name'
-          ) {
-            const props = [];
-            props.push(attribute.name);
-            console.log(props);
-            return props;
-          }
-          return null;
-        }
-      );
-    console.log(productAttributes);
+
     this.state = {
       productData: productData,
       index: 0,
-      attributeSelected: 'none',
+      selectedAttributes: {},
     };
   }
 
   render() {
     // productData
-
     const productData = this.state.productData[0];
-    console.log(productData);
+    const { addItemToCart } = this.props;
+    console.log(this.state.selectedAttributes);
     return (
       <Container>
         <Section marginRight={'20px'} width={''}>
@@ -97,27 +84,66 @@ class ProductPage extends Component {
                           <>
                             {attr.type ===
                             'swatch' ? (
-                              <Box
-                                key={index}
-                                background={
+                              <Div
+                                $highlight={
+                                  this.state
+                                    .selectedAttributes[
+                                    attr.name
+                                  ] ===
                                   attribute.value
-                                }></Box>
+                                    ? true
+                                    : false
+                                }>
+                                <Box
+                                  border="none"
+                                  key={index}
+                                  background={
+                                    attribute.value
+                                  }
+                                  height="32px"
+                                  width="32px"
+                                  marginRight="0px"
+                                  onClick={() => {
+                                    this.setState(
+                                      {
+                                        ...this
+                                          .state,
+                                        selectedAttributes:
+                                          {
+                                            ...this
+                                              .state
+                                              .selectedAttributes,
+
+                                            [attr.name]:
+                                              attribute.value,
+                                          },
+                                      }
+                                    );
+                                  }}></Box>
+                              </Div>
                             ) : (
                               <Box
                                 onClick={() =>
                                   this.setState({
                                     ...this.state,
-                                    attributeSelected:
+                                    selectedAttributes:
                                       {
-                                        name: '',
+                                        ...this
+                                          .state
+                                          .selectedAttributes,
+
+                                        [attr.name]:
+                                          attribute.value,
                                       },
                                   })
                                 }
                                 key={index}
                                 $selected={
-                                  attribute.value ===
                                   this.state
-                                    .attributeSelected
+                                    .selectedAttributes[
+                                    attr.name
+                                  ] ===
+                                  attribute.value
                                     ? true
                                     : false
                                 }>
@@ -136,24 +162,26 @@ class ProductPage extends Component {
 
           <div className="price">
             <h3>PRICE:</h3>
-            {productData.prices
-              .filter(
-                (item) =>
-                  item.currency.symbol ===
-                  this.props.currentCurrency
-              )
-              .map((item, index) => (
-                <h4 key={index}>
-                  {item.currency.symbol}
-                  {item.amount}
-                </h4>
-              ))}
+
+            <h4>
+              {getCurrentCurrency(
+                productData.prices,
+                this.props.currentCurrency
+              )}
+            </h4>
           </div>
           <Button
             color="#ffffff"
             background="#5ECE7B"
             width="292px"
-            height="52px">
+            height="52px"
+            onClick={() =>
+              addItemToCart({
+                ...productData,
+                selectedAttributes:
+                  this.state.selectedAttributes,
+              })
+            }>
             ADD TO CART
           </Button>
           <div className="description">
@@ -178,9 +206,17 @@ const MapStateToProps = (state) => {
       state.currency.currentCurrency,
   };
 };
-
+const MapDispatchToProps = (dispatch) => {
+  return {
+    addItemToCart: (item) =>
+      dispatch(addItem(item)),
+  };
+};
 export default withRouter(
-  connect(MapStateToProps)(ProductPage)
+  connect(
+    MapStateToProps,
+    MapDispatchToProps
+  )(ProductPage)
 );
 
 const Container = styled.div`
@@ -260,12 +296,13 @@ const Section = styled.div`
 `;
 
 const Box = styled.div`
-  border: 1px solid;
-  height: 45px;
+  border: ${(props) =>
+    props.border || '1px solid'};
+  height: ${(props) => props.height || '45px'};
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 63px;
+  width: ${(props) => props.width || '63px'};
   margin-right: ${(props) =>
     props.marginRight || '10px'};
   font-family: 'Source Sans Pro', sans-serif;
@@ -329,4 +366,17 @@ const Image = styled.img`
   width: 610px;
   object-fit: contain;
   height: 32em;
+`;
+
+const Div = styled.div`
+  border: ${(props) =>
+    props.$highlight
+      ? '1px solid #5ECE7B'
+      : '1px solid transparent'};
+  padding: 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 36px;
+  height: 36px;
 `;
