@@ -13,6 +13,7 @@ import {
   fetchCatalog,
   fetchCategories,
   updateLoadingState,
+  updateErrorState,
 } from './redux/reducers/inventory/inventory.action';
 import {
   GlobalStyles,
@@ -41,9 +42,15 @@ const a = client
     store.dispatch(fetchCurrecies(result.data))
   );
 
-Promise.all([a, b, c]).then(() =>
-  store.dispatch(updateLoadingState(false))
-);
+Promise.all([a, b, c])
+  .then(() =>
+    store.dispatch(updateLoadingState(false))
+  )
+  .catch((e) =>
+    store.dispatch(
+      updateErrorState('connection Time Out')
+    )
+  );
 
 ReactDOM.render(
   <React.StrictMode>

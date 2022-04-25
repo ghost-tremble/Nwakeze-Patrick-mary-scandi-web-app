@@ -5,6 +5,7 @@ const initialState = {
   catalog: [],
 
   categories: [],
+  errorString: '',
 };
 
 const inventoryReducer = (
@@ -28,6 +29,12 @@ const inventoryReducer = (
       return {
         ...state,
         isLoading: action.payload,
+      };
+    }
+    case InventoryActionTypes.ERROR_STATE: {
+      return {
+        ...state,
+        errorString: action.payload,
       };
     }
     default:

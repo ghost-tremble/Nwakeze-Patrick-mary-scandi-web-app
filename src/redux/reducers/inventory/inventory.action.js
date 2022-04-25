@@ -13,3 +13,8 @@ export const updateLoadingState = (data) => ({
   type: InventoryActionTypes.IS_LOADING,
   payload: data,
 });
+
+export const updateErrorState = (data) => ({
+  type: InventoryActionTypes.ERROR_STATE,
+  payload: data,
+});
