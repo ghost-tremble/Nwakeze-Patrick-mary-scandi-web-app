@@ -36,7 +36,7 @@ class Cart extends Component {
           <div>
             <H2>
               My Bag,{' '}
-              <h3
+              <p
                 style={{
                   fontFamily: 'Raleway',
                   fontSize: '16px',
@@ -47,7 +47,7 @@ class Cart extends Component {
                   display: 'inline',
                 }}>
                 {cartSize} items
-              </h3>
+              </p>
             </H2>
 
             {cartItems.map((item) => {
@@ -58,10 +58,13 @@ class Cart extends Component {
                 prices,
                 gallery,
                 attributes,
+                id,
               } = item;
-              console.log(gallery[0]);
+
               return (
                 <CartItem
+                  key={id}
+                  id={id}
                   name={name}
                   brand={brand}
                   prices={prices}
@@ -106,7 +109,9 @@ class Cart extends Component {
                     lineHeight: '160%',
                   }}>
                   {currency}
-                  {Number(cartTotal).toLocaleString()}
+                  {Number(
+                    cartTotal
+                  ).toLocaleString()}
                 </p>
               </div>
             </Total>

@@ -92,7 +92,7 @@ class CartItem extends Component {
                     {attr.items.map(
                       (attribute, index) => {
                         return (
-                          <>
+                          <div key={index}>
                             {attr.type ===
                             'swatch' ? (
                               <Div
@@ -167,7 +167,7 @@ class CartItem extends Component {
                                 {attribute.value}
                               </Box>
                             )}
-                          </>
+                          </div>
                         );
                       }
                     )}

@@ -130,7 +130,7 @@ class CartPageItem extends Component {
                     {attr.items.map(
                       (attribute, index) => {
                         return (
-                          <>
+                          <div key={index}>
                             {attr.type ===
                             'swatch' ? (
                               <Div
@@ -199,7 +199,7 @@ class CartPageItem extends Component {
                                 {attribute.value}
                               </Box>
                             )}
-                          </>
+                          </div>
                         );
                       }
                     )}

@@ -88,10 +88,11 @@ class ProductPage extends Component {
                     {attr.items.map(
                       (attribute, index) => {
                         return (
-                          <>
+                          <div key={index}>
                             {attr.type ===
                             'swatch' ? (
                               <Div
+                                key={index}
                                 $highlight={
                                   this.state
                                     .selectedAttributes[
@@ -103,7 +104,6 @@ class ProductPage extends Component {
                                 }>
                                 <Box
                                   border="none"
-                                  key={index}
                                   background={
                                     attribute.value
                                   }
@@ -157,7 +157,7 @@ class ProductPage extends Component {
                                 {attribute.value}
                               </Box>
                             )}
-                          </>
+                          </div>
                         );
                       }
                     )}

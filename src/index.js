@@ -1,10 +1,9 @@
 import React from 'react';
+
 import ReactDOM from 'react-dom';
 import store from './redux/store';
 import { Provider } from 'react-redux';
-import styled, {
-  ThemeProvider,
-} from 'styled-components';
+import { ThemeProvider } from 'styled-components';
 import App from './App';
 import category, {
   categories,
@@ -22,6 +21,7 @@ import {
 import client from './graphql/client';
 import { fetchCurrecies } from './redux/reducers/currency/currency.action';
 
+// graphql queries
 const c = client
   .query({
     query: category,

@@ -15,6 +15,8 @@ import {
   selectCurrentCurrency,
 } from '../redux/reducers/cart/cart.selector';
 import { Button } from '../components/cart/Cart';
+
+// cart page
 class CartPage extends Component {
   render() {
     const {
@@ -39,10 +41,11 @@ class CartPage extends Component {
             prices,
             gallery,
             attributes,
+            id,
           } = item;
 
           return (
-            <>
+            <div key={id}>
               <CartPageItem
                 name={name}
                 brand={brand}
@@ -59,49 +62,44 @@ class CartPage extends Component {
                 }
               />
               <Line />
-            </>
+            </div>
           );
         })}
-
+        {/* Total price */}
         <Total>
           <div className="tax">
             <span>
-              <p>
-                Tax:{' '}
-                <h3>
-                  {currency +
-                    (
-                      Number(cartTotal) * 0.1
-                    ).toLocaleString()}
-                </h3>
-              </p>
+              Tax:{' '}
+              <h3>
+                {currency +
+                  (
+                    Number(cartTotal) * 0.1
+                  ).toLocaleString()}
+              </h3>
             </span>
             <span>
-              <p>
-                Qty: <h3>{cartSize}</h3>
-              </p>
+              Qty: <h3>{cartSize}</h3>
             </span>
           </div>
 
           <div>
             <span>
-              <p>
-                Total:{' '}
-                <h3>
-                  {currency}
-                  {Number(
-                    cartTotal
-                  ).toLocaleString()}
-                </h3>
-              </p>
+              Total:{' '}
+              <h3>
+                {currency}
+                {Number(
+                  cartTotal
+                ).toLocaleString()}
+              </h3>
             </span>
           </div>
         </Total>
         <Button
           width="249px"
           background="#5ECE7B;
-        
+           
 "
+          to="/order"
           color="#ffffff">
           ORDER
         </Button>
@@ -174,11 +172,13 @@ const Total = styled.div`
       letter-spacing: 0em;
       display: inline;
     }
-    p {
+    span {
+      margin-bottom: 8px;
       font-family: Roboto;
       font-size: 24px;
       font-weight: 400;
       line-height: 28px;
+      display: block;
       letter-spacing: 0em;
     }
   }
