@@ -9,13 +9,6 @@ import { Redirect } from 'react-router-dom';
 import Category from './components/Category';
 // import HomePage from './pages/Home';
 import Header from './components/Header';
-import category, {
-  categories,
-} from './graphql/queries';
-import {
-  fetchCatalog,
-  fetchCategories,
-} from './redux/reducers/inventory/inventory.action';
 import CartPage from './pages/CartPage';
 import Cart from './components/cart/Cart';
 import './_app.css';

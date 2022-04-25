@@ -1,6 +1,5 @@
 import { Component } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { ReactComponent as CartIcon } from '../assets/add-cart.svg';
 import { getCurrentCurrency } from '../utils/getCurrentCurrency';

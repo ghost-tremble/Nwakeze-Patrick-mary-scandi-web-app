@@ -29,7 +29,7 @@ class ProductPage extends Component {
     // productData
     const productData = this.state.productData[0];
     const { addItemToCart } = this.props;
-    console.log(this.state.selectedAttributes);
+
     return (
       <Container>
         <Section marginRight={'20px'} width={''}>

@@ -13,13 +13,7 @@ import { toggleCartHidden } from '../redux/reducers/cart/cart.actions';
 import { selectCartItemsCount } from '../redux/reducers/cart/cart.selector';
 
 class Header extends Component {
-  constructor(props) {
-    super(props);
-    console.log(props);
-  }
-
   render() {
-    console.log(this.props);
     const {
       categories,
       location,

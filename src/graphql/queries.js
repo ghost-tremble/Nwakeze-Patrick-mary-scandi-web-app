@@ -1,5 +1,7 @@
 import { gql } from '@apollo/client';
 
+// graphql queries
+
 export const currencies = gql`
   query {
     currencies {
