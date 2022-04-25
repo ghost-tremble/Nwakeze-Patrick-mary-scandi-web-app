@@ -5,6 +5,7 @@ import {
 import rootReducer from './rootReducer';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
+import { persistStore } from 'redux-persist';
 
 const middlewares = [logger, thunk]; //middlewares
 
@@ -16,3 +17,4 @@ const store = createStore(
 );
 
 export default store;
+export const savedStore = persistStore(store);

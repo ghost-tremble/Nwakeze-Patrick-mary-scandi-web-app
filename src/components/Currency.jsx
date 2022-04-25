@@ -15,7 +15,7 @@ class Currency extends Component {
       currentCurrency,
       showCurrency,
     } = this.props;
-    console.log('hidden' + hidden);
+
     return (
       <Container hidden={hidden}>
         <ul>

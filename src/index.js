@@ -1,7 +1,7 @@
 import React from 'react';
-
+import { PersistGate } from 'redux-persist/integration/react';
 import ReactDOM from 'react-dom';
-import store from './redux/store';
+import store, { savedStore } from './redux/store';
 import { Provider } from 'react-redux';
 import { ThemeProvider } from 'styled-components';
 import App from './App';
@@ -57,7 +57,9 @@ ReactDOM.render(
     <Provider store={store}>
       <ThemeProvider theme={lightTheme}>
         <GlobalStyles />
-        <App />
+        <PersistGate persistor={savedStore}>
+          <App />
+        </PersistGate>
       </ThemeProvider>
     </Provider>
   </React.StrictMode>,

@@ -29,7 +29,7 @@ class Cart extends Component {
       cartTotal,
       currency,
     } = this.props;
-    console.log(cartItems);
+
     return (
       <CartOverlay hidden={hidden}>
         <Container>
