@@ -191,15 +191,11 @@ class ProductPage extends Component {
             }>
             ADD TO CART
           </Button>
-          <div className="description">
-            <p>
-              Find stunning women's cocktail
-              dresses and party dresses. Stand out
-              in lace and metallic cocktail
-              dresses and party dresses from all
-              your favorite brands.
-            </p>
-          </div>
+          <div
+            className="description"
+            dangerouslySetInnerHTML={{
+              __html: productData.description,
+            }}></div>
         </Section>
       </Container>
     );

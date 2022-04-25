@@ -17,6 +17,7 @@ const category = gql`
         brand
         gallery
         inStock
+        description
         attributes {
           type
           name

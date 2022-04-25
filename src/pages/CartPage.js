@@ -14,6 +14,7 @@ import {
   selectCartTotal,
   selectCurrentCurrency,
 } from '../redux/reducers/cart/cart.selector';
+import { Button } from '../components/cart/Cart';
 class CartPage extends Component {
   render() {
     const {
@@ -63,10 +64,16 @@ class CartPage extends Component {
         })}
 
         <Total>
-          <div>
+          <div className="tax">
             <span>
               <p>
-                Tax: <h3>{currency + '150'}</h3>
+                Tax:{' '}
+                <h3>
+                  {currency +
+                    (
+                      Number(cartTotal) * 0.1
+                    ).toLocaleString()}
+                </h3>
               </p>
             </span>
             <span>
@@ -82,12 +89,22 @@ class CartPage extends Component {
                 Total:{' '}
                 <h3>
                   {currency}
-                  {cartTotal}
+                  {Number(
+                    cartTotal
+                  ).toLocaleString()}
                 </h3>
               </p>
             </span>
           </div>
         </Total>
+        <Button
+          width="249px"
+          background="#5ECE7B;
+        
+"
+          color="#ffffff">
+          ORDER
+        </Button>
       </Container>
     );
   }
@@ -116,12 +133,12 @@ export default connect(
 )(CartPage);
 
 const Container = styled.div`
-  height: 100vh;
   margin: 80px 0px 0px 0px;
   width: 100%;
   display: flex;
   padding-left: 100px;
   padding-right: 100px;
+  padding-bottom: 258px;
   flex-direction: column;
   h1 {
     font-family: Raleway;
@@ -143,6 +160,11 @@ const Line = styled.div`
 `;
 
 const Total = styled.div`
+  margin-bottom: 16px;
+  margin-top: 32px;
+  .tax {
+    margin-bottom: 24px;
+  }
   div {
     h3 {
       font-family: Raleway;

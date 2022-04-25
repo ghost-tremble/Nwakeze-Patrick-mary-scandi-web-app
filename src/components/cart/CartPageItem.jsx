@@ -83,7 +83,17 @@ class CartPageItem extends Component {
                 <div
                   key={index}
                   className="attribute-selection">
-                  <h3>{attr.name}:</h3>
+                  <h3
+                    style={{
+                      fontFamily:
+                        'Roboto Condensed',
+                      fontZize: '18px',
+                      fontWeight: '700',
+                      lineHeight: '18px',
+                      letterSpacing: '0em',
+                    }}>
+                    {attr.name}:
+                  </h3>
 
                   <div className="box-container">
                     {attr.items.map(

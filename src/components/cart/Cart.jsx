@@ -106,7 +106,7 @@ class Cart extends Component {
                     lineHeight: '160%',
                   }}>
                   {currency}
-                  {cartTotal}
+                  {Number(cartTotal).toLocaleString()}
                 </p>
               </div>
             </Total>
@@ -192,13 +192,13 @@ const ButtonContainer = styled.div`
   align-items: center;
   margin: 0px 0px 20px 0px;
 `;
-const Button = styled(Link)`
+export const Button = styled(Link)`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   color: ${(props) => props.color};
-  width: 140px;
+  width: ${(props) => props.width || '140px'};
   height: 43px;
   margin: 0px ${(props) => props.margin} 0px 0px;
   border: ${(props) =>
