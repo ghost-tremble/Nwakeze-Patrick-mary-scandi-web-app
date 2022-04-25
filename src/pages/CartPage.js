@@ -40,14 +40,14 @@ class CartPage extends Component {
             gallery,
             attributes,
           } = item;
-          console.log(gallery[0]);
+
           return (
             <>
               <CartPageItem
                 name={name}
                 brand={brand}
                 prices={prices}
-                image={gallery[0]}
+                image={gallery}
                 attributes={attributes}
                 quantity={item.quantity}
                 addItem={() => addItem(item)}

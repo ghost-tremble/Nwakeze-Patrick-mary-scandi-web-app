@@ -19,9 +19,9 @@ import {
 import CartPage from './pages/CartPage';
 import Cart from './components/cart/Cart';
 import './_app.css';
-import client from './graphql/client';
 import ProductPage from './pages/ProductPage';
 import Currency from './components/Currency';
+import Loader from './components/Loader';
 class App extends PureComponent {
   render() {
     const { isLoading, categories } = this.props;
@@ -29,7 +29,7 @@ class App extends PureComponent {
     return (
       <>
         {isLoading ? (
-          <h1>hello</h1>
+          <Loader />
         ) : (
           <Router>
             <Route>

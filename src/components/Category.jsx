@@ -31,27 +31,27 @@ class Category extends Component {
         <Container>
           <H1>{this.props.name}</H1>
           <ProductList>
-            {products.map(
-              ({
+            {products.map((item) => {
+              const {
                 name,
                 gallery,
                 inStock,
                 id,
                 prices,
-              }) => {
-                return (
-                  <ProductItem
-                    key={id}
-                    id={id}
-                    productLink={`${location.pathname}/${id}`}
-                    name={name}
-                    image={gallery[0]}
-                    stock={inStock}
-                    prices={prices}
-                  />
-                );
-              }
-            )}
+              } = item;
+              return (
+                <ProductItem
+                  key={id}
+                  item={item}
+                  id={id}
+                  productLink={`${location.pathname}/${id}`}
+                  name={name}
+                  image={gallery[0]}
+                  stock={inStock}
+                  prices={prices}
+                />
+              );
+            })}
           </ProductList>
         </Container>
       </>

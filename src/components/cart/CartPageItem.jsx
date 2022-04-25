@@ -9,6 +9,8 @@ import { connect } from 'react-redux';
 import { getCurrentCurrency } from '../../utils/getCurrentCurrency';
 import { ReactComponent as Plus } from '../../assets/plus.svg';
 import { ReactComponent as Minus } from '../../assets/minus.svg';
+import { ReactComponent as Left } from '../../assets/left.svg';
+import { ReactComponent as Right } from '../../assets/right.svg';
 
 class CartPageItem extends Component {
   constructor(props) {
@@ -16,7 +18,36 @@ class CartPageItem extends Component {
     this.state = {
       selectedAttributes:
         this.props.selectedAttributes,
+      index: 0,
     };
+  }
+
+  reduceIndex(number) {
+    if (this.state.index === 0) {
+      // return 0 if the last index is reached
+      return this.setState({
+        ...this.state,
+        index: 0,
+      });
+    }
+    return this.setState({
+      ...this.state,
+      index: this.state.index - number,
+    });
+  }
+  increaseIndex(number, length) {
+    if (this.state.index === length - 1) {
+      // return the final index if reached
+      return this.setState({
+        ...this.state,
+        index: this.state.index,
+      });
+    }
+    // update the index by the number
+    return this.setState({
+      ...this.state,
+      index: this.state.index + number,
+    });
   }
   render() {
     const {
@@ -221,10 +252,29 @@ class CartPageItem extends Component {
                   width: '141px',
                   height: '185px',
                 }}
-                src={image}
+                src={image[this.state.index]}
                 alt="slidercartimage"
               />
             </div>
+            <PictureChanger>
+              <div>
+                <Right
+                  onClick={() =>
+                    this.reduceIndex(1)
+                  }
+                />
+              </div>
+              <div className="left">
+                <Left
+                  onClick={() =>
+                    this.increaseIndex(
+                      1,
+                      image.length
+                    )
+                  }
+                />
+              </div>
+            </PictureChanger>
           </div>
         </div>
       </Container>
@@ -248,4 +298,22 @@ const Container = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-bottom: 20px;
+`;
+
+const PictureChanger = styled.div`
+  display: flex;
+  align-items: flex-end;
+  justify-content: end;
+  width: 141px;
+  height: 185px;
+  margin-left: 33px;
+  padding-bottom: 16px;
+  position: absolute;
+  div {
+    cursor: pointer;
+  }
+  .left {
+    margin-right: 16px;
+    margin-left: 8px;
+  }
 `;

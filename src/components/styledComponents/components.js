@@ -16,6 +16,7 @@ export const Box = styled.div`
   border: ${(props) =>
     props.border || '1px solid'};
   height: ${(props) => props.height || '45px'};
+  padding: ${(props) => props.padding};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -30,6 +31,8 @@ export const Box = styled.div`
   line-height: 112%;
   letter-spacing: 0.05em;
   cursor: pointer;
+  font-size: ${(props) =>
+    props.fontSize || '16px'};
   color: ${(props) =>
     props.$selected ? '#FFFFFF' : '#000000'};
   background: ${(props) =>

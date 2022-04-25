@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { ReactComponent as CartIcon } from '../assets/add-cart.svg';
 import { getCurrentCurrency } from '../utils/getCurrentCurrency';
+import { addItem } from '../redux/reducers/cart/cart.actions';
+import { withRouter } from 'react-router-dom';
 // single Product Item
 class ProductItem extends Component {
   // constructor(props) {
@@ -11,17 +13,21 @@ class ProductItem extends Component {
   // }
 
   render() {
+    const { addItemToCart, history } = this.props;
     const {
       name,
       image,
       stock,
       productLink,
       prices,
+      item,
     } = this.props;
     return (
       <>
         <Container
-          to={productLink}
+          onClick={() =>
+            history.push(productLink)
+          }
           opacity={stock ? '1' : '0.5'}>
           <div className="imageCard">
             <ImageContainer>
@@ -37,7 +43,14 @@ class ProductItem extends Component {
           </div>
 
           <div className="addToCart">
-            <AddCart>
+            <AddCart
+              onClick={(e) => {
+                e.stopPropagation();
+                addItemToCart({
+                  ...item,
+                  selectedAttributes: {},
+                });
+              }}>
               <CartIcon />
             </AddCart>
           </div>
@@ -64,12 +77,21 @@ const MapStateToProps = (state) => {
       state.currency.currentCurrency,
   };
 };
+const MapDispatchToProps = (dispatch) => {
+  return {
+    addItemToCart: (data) =>
+      dispatch(addItem(data)),
+  };
+};
 
-export default connect(MapStateToProps)(
-  ProductItem
+export default withRouter(
+  connect(
+    MapStateToProps,
+    MapDispatchToProps
+  )(ProductItem)
 );
 
-const Container = styled(Link)`
+const Container = styled.div`
   padding: 16px;
   width: 24.125rem;
   height: 27.75rem;
@@ -154,4 +176,5 @@ const AddCart = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 4;
 `;

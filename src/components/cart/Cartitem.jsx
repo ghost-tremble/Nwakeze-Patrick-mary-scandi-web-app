@@ -4,6 +4,7 @@ import { getCurrentCurrency } from '../../utils/getCurrentCurrency';
 import { connect } from 'react-redux';
 import { ReactComponent as Plus } from '../../assets/plus.svg';
 import { ReactComponent as Minus } from '../../assets/minus.svg';
+
 import {
   Box,
   Div,
@@ -152,6 +153,7 @@ class CartItem extends Component {
                                 height="24px"
                                 width="max-width"
                                 minWidth="24px"
+                                fontSize="14px"
                                 key={index}
                                 $selected={
                                   this.state

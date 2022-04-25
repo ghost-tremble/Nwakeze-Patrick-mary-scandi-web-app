@@ -4,6 +4,7 @@ import { createStructuredSelector } from 'reselect';
 import styled from 'styled-components';
 import { ReactComponent as LogoImage } from '../assets/headerIcons/shop-logo.svg';
 import { ReactComponent as Currency } from '../assets/headerIcons/currency.svg';
+import { ReactComponent as Currency2 } from '../assets/headerIcons/currency2.svg';
 import { ReactComponent as CartIcon } from '../assets/headerIcons/cart.svg';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -19,8 +20,12 @@ class Header extends Component {
 
   render() {
     console.log(this.props);
-    const { categories, location, cartSize } =
-      this.props;
+    const {
+      categories,
+      location,
+      cartSize,
+      hidden,
+    } = this.props;
 
     return (
       <Container>
@@ -59,7 +64,11 @@ class Header extends Component {
             onClick={() =>
               this.props.showCurrency()
             }>
-            <Currency />
+            {hidden ? (
+              <Currency />
+            ) : (
+              <Currency2 />
+            )}
           </IconButton>
           <IconButton
             onClick={() => this.props.showCart()}>
@@ -78,6 +87,7 @@ class Header extends Component {
 const MapStateToProps = (state) => {
   return {
     categories: state.inventory.categories,
+    hidden: state.currency.hidden,
     cartSize: createStructuredSelector({
       number: selectCartItemsCount,
     })(state),
