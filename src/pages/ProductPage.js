@@ -32,7 +32,11 @@ class ProductPage extends Component {
 
     return (
       <Container>
-        <Section marginRight={'20px'} width={''}>
+        <Section
+          marginRight={'20px'}
+          width={''}
+          scroll="auto"
+          height="19.04875rem">
           {productData.gallery.map(
             (item, index) => {
               return (
@@ -233,10 +237,13 @@ const Container = styled.div`
 
 const Section = styled.div`
   background-color:${(props) => props.background};
-  height: 32em;
+height: ${(props) => props.height || '32rem'};
+  overflow:hidden;
   width: ${(props) => props.width || '200px'};
   margin-right: ${(props) => props.marginRight};
-  
+  &:hover{
+    overflow-y:${(props) => props.scroll};
+  }
   .productName {
     margin-bottom: 43px;
   }
@@ -335,9 +342,9 @@ const SelectImage = styled.div`
   margin: 0px 0px 32px 0px;
 
   .image {
-    width: 176.65px;
-    height: 87.61px;
-    object-fit: contain;
+    width: 4.9375rem;
+    height: 5rem;
+    object-fit: cover;
   }
 `;
 
