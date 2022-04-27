@@ -152,7 +152,7 @@ color : ${(props) =>
     : props.theme.secondary} ;
  &:hover {
      cursor:pointer;
-       border-bottom : 1px solid ${(props) =>
+       border-bottom : 2px solid ${(props) =>
          props.active
            ? props.theme.primary
            : props.theme.primary};

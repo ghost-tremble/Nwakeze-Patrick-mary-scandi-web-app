@@ -91,7 +91,7 @@ export default withRouter(
 );
 
 const Container = styled.div`
-  padding: 16px;
+  padding: 1rem;
   width: 24.125rem;
   height: 27.75rem;
   flex-grow: 1 1 30%;
@@ -123,16 +123,18 @@ const Container = styled.div`
 `;
 const ImageContainer = styled.div`
   padding: 1rem;
-  width: 22.25em;
-  height: 21.125em;
+  width: 354px;
+  height: 330px;
   margin: 0px 0px 1.31rem;
+
   justify-content: center;
   display: flex;
   align-items: center;
 `;
 const Image = styled.img`
-  width: 22.25em;
-  height: 21.125em;
+  width: 354px;
+  height: 330px;
+  object-fit: contain;
 `;
 const Details = styled.div``;
 const H1 = styled.h1`
