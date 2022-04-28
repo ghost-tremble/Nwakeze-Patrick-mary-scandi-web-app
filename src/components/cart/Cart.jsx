@@ -1,5 +1,6 @@
-import { Component } from 'react';
+import { Component, createRef } from 'react';
 import styled from 'styled-components';
+import { closeOnClickOut } from '../../utils/closeOnClickOut';
 import { createStructuredSelector } from 'reselect';
 import CartItem from './Cartitem';
 import { connect } from 'react-redux';
@@ -15,9 +16,24 @@ import {
   selectCartTotal,
   selectCurrentCurrency,
 } from '../../redux/reducers/cart/cart.selector';
-import { toggleCartHidden } from '../../redux/reducers/cart/cart.actions';
+import {
+  toggleCartHidden,
+  closeCartOnClickOut,
+} from '../../redux/reducers/cart/cart.actions';
 // cart for showing products
 class Cart extends Component {
+  constructor(props) {
+    super(props);
+    this.wrapperRef = createRef(null);
+  }
+
+  componentDidMount() {
+    closeOnClickOut(
+      this.wrapperRef,
+      this.props.closeCartOnClickOut
+    );
+  }
+
   render() {
     const {
       hidden,
@@ -32,7 +48,7 @@ class Cart extends Component {
 
     return (
       <CartOverlay hidden={hidden}>
-        <Container>
+        <Container ref={this.wrapperRef}>
           <div>
             <H2>
               My Bag,{' '}
@@ -50,7 +66,7 @@ class Cart extends Component {
               </p>
             </H2>
 
-            {cartItems.map((item) => {
+            {cartItems.map((item, index) => {
               const {
                 name,
                 selectedAttributes,
@@ -63,7 +79,7 @@ class Cart extends Component {
 
               return (
                 <CartItem
-                  key={id}
+                  key={index}
                   id={id}
                   name={name}
                   brand={brand}
@@ -151,6 +167,8 @@ const MapDispatchToProps = (dispatch) => {
     addItem: (data) => dispatch(addItem(data)),
     removeItem: (data) =>
       dispatch(removeItem(data)),
+    closeCartOnClickOut: (data) =>
+      dispatch(closeCartOnClickOut(data)),
   };
 };
 export default connect(

@@ -11,13 +11,6 @@ import {
   Attributes,
 } from '../styledComponents/components';
 class CartItem extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      selectedAttributes:
-        this.props.selectedAttributes,
-    };
-  }
   render() {
     const {
       name,
@@ -25,6 +18,7 @@ class CartItem extends Component {
       image,
       attributes,
       prices,
+      selectedAttributes,
       quantity,
       addItem,
       removeItem,
@@ -99,8 +93,7 @@ class CartItem extends Component {
                                 height="20px"
                                 width="20px"
                                 $highlight={
-                                  this.state
-                                    .selectedAttributes[
+                                  selectedAttributes[
                                     attr.name
                                   ] ===
                                   attribute.value
@@ -115,49 +108,17 @@ class CartItem extends Component {
                                   }
                                   height="16px"
                                   width="16px"
-                                  marginRight="0px"
-                                  onClick={() => {
-                                    this.setState(
-                                      {
-                                        ...this
-                                          .state,
-                                        selectedAttributes:
-                                          {
-                                            ...this
-                                              .state
-                                              .selectedAttributes,
-
-                                            [attr.name]:
-                                              attribute.value,
-                                          },
-                                      }
-                                    );
-                                  }}></Box>
+                                  marginRight="0px"></Box>
                               </Div>
                             ) : (
                               <Box
-                                onClick={() =>
-                                  this.setState({
-                                    ...this.state,
-                                    selectedAttributes:
-                                      {
-                                        ...this
-                                          .state
-                                          .selectedAttributes,
-
-                                        [attr.name]:
-                                          attribute.value,
-                                      },
-                                  })
-                                }
                                 height="24px"
                                 width="max-width"
                                 minWidth="24px"
                                 fontSize="14px"
                                 key={index}
                                 $selected={
-                                  this.state
-                                    .selectedAttributes[
+                                  selectedAttributes[
                                     attr.name
                                   ] ===
                                   attribute.value

@@ -1,13 +1,25 @@
+import { checkCartItemAtrributes } from '../../../utils/checkCartAttribute';
 export const addItemToCart = (
   cartItems,
   cartItemToAdd
 ) => {
   const existingCartItem = cartItems.find(
-    (cartItem) => cartItem.id === cartItemToAdd.id
+    (cartItem) =>
+      cartItem.id === cartItemToAdd.id &&
+      checkCartItemAtrributes(
+        cartItem.selectedAttributes,
+        cartItemToAdd.selectedAttributes
+      )
   );
+  console.log(existingCartItem);
+
   if (existingCartItem) {
     return cartItems.map((cartItem) =>
-      cartItem.id === cartItemToAdd.id
+      cartItem.id === cartItemToAdd.id &&
+      checkCartItemAtrributes(
+        cartItem.selectedAttributes,
+        cartItemToAdd.selectedAttributes
+      )
         ? {
             ...cartItem,
             quantity: cartItem.quantity + 1,
@@ -28,18 +40,29 @@ export const removeItemFromCart = (
 ) => {
   const existingCartItem = cartItems.find(
     (cartItem) =>
-      cartItem.id === cartItemToRemove.id
+      cartItem.id === cartItemToRemove.id &&
+      checkCartItemAtrributes(
+        cartItem.selectedAttributes,
+        cartItemToRemove.selectedAttributes
+      )
   );
 
   if (existingCartItem.quantity === 1) {
     return cartItems.filter(
       (cartItem) =>
-        cartItem.id !== cartItemToRemove.id
+        !checkCartItemAtrributes(
+          cartItem.selectedAttributes,
+          cartItemToRemove.selectedAttributes
+        )
     );
   }
 
   return cartItems.map((cartItem) =>
-    cartItem.id === cartItemToRemove.id
+    cartItem.id === cartItemToRemove.id &&
+    checkCartItemAtrributes(
+      cartItem.selectedAttributes,
+      cartItemToRemove.selectedAttributes
+    )
       ? {
           ...cartItem,
           quantity: cartItem.quantity - 1,

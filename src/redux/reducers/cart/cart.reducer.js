@@ -13,6 +13,11 @@ const cartReducer = (
   action
 ) => {
   switch (action.type) {
+    case CartActionTypes.CLOSE_ON_CLICK_OUT:
+      return {
+        ...state,
+        hidden: action.payload,
+      };
     case CartActionTypes.TOGGLE_CART_HIDDEN:
       return {
         ...state,

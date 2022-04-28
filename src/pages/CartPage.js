@@ -33,7 +33,7 @@ class CartPage extends Component {
           <h1>CART</h1>
         </div>
         <Line />
-        {cartItems.map((item) => {
+        {cartItems.map((item, index) => {
           const {
             name,
             selectedAttributes,
