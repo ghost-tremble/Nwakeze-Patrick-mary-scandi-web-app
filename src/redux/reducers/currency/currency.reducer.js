@@ -11,6 +11,11 @@ const currencyReducer = (
   action
 ) => {
   switch (action.type) {
+    case CurrencyActionTypes.CLOSE_CURRENCIES_ON_CLICK_OUT:
+      return {
+        ...state,
+        hidden: true,
+      };
     case CurrencyActionTypes.GET_CURENCIES:
       return {
         ...state,

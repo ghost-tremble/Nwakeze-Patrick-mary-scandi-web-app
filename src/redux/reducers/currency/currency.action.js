@@ -11,3 +11,10 @@ export const changeCurrecies = (data) => ({
 export const toggleOpenCurrecies = () => ({
   type: CurrencyActionTypes.TOGGLE_OPEN_CURRECIES,
 });
+
+export const closeCurrenciesOnClickOut = (
+  data
+) => ({
+  type: CurrencyActionTypes.CLOSE_CURRENCIES_ON_CLICK_OUT,
+  payload: data,
+});

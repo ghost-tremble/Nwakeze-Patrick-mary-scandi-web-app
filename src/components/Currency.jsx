@@ -1,12 +1,25 @@
-import { Component } from 'react';
+import { Component, createRef } from 'react';
 import { connect } from 'react-redux';
+import { closeOnClickOut } from '../utils/closeOnClickOut';
 
 import styled from 'styled-components';
 import {
   changeCurrecies,
   toggleOpenCurrecies,
+  closeCurrenciesOnClickOut,
 } from '../redux/reducers/currency/currency.action';
 class Currency extends Component {
+  constructor(props) {
+    super(props);
+    this.wrapperRef = createRef(null);
+  }
+
+  componentDidMount() {
+    closeOnClickOut(
+      this.wrapperRef,
+      this.props.closeCurrencyOnClickOut
+    );
+  }
   render() {
     const {
       currency,
@@ -17,7 +30,9 @@ class Currency extends Component {
     } = this.props;
 
     return (
-      <Container hidden={hidden}>
+      <Container
+        hidden={hidden}
+        ref={this.wrapperRef}>
         <ul>
           {currency.map((item, i) => {
             return (
@@ -58,6 +73,8 @@ const MapDispatchToProps = (dispatch) => {
       dispatch(changeCurrecies(currencyToChange)),
     showCurrency: () =>
       dispatch(toggleOpenCurrecies()),
+    closeCurrencyOnClickOut: (data) =>
+      dispatch(closeCurrenciesOnClickOut(data)),
   };
 };
 
