@@ -1,5 +1,6 @@
-import { Component } from 'react';
+import { Component, Fragment } from 'react';
 import styled from 'styled-components';
+import parse from 'html-react-parser';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { addItem } from '../redux/reducers/cart/cart.actions';
@@ -29,13 +30,16 @@ class ProductPage extends Component {
     // productData
     const productData = this.state.productData[0];
     const { addItemToCart } = this.props;
-
+    const description = parse(
+      productData.description
+    );
     return (
       <Container>
         <Section
           marginRight={'20px'}
           width={''}
           scroll="auto"
+          overflow="hidden"
           height="19.04875rem">
           {productData.gallery.map(
             (item, index) => {
@@ -195,11 +199,9 @@ class ProductPage extends Component {
             }>
             ADD TO CART
           </Button>
-          <div
-            className="description"
-            dangerouslySetInnerHTML={{
-              __html: productData.description,
-            }}></div>
+          <div className="description">
+            {description}
+          </div>
         </Section>
       </Container>
     );
@@ -238,7 +240,7 @@ const Container = styled.div`
 const Section = styled.div`
   background-color:${(props) => props.background};
 height: ${(props) => props.height || '32rem'};
-  overflow:hidden;
+  overflow:${(props) => props.overflow};
   width: ${(props) => props.width || '200px'};
   margin-right: ${(props) => props.marginRight};
   &:hover{

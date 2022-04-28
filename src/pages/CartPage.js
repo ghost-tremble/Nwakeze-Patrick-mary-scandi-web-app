@@ -131,23 +131,24 @@ export default connect(
 )(CartPage);
 
 const Container = styled.div`
-  margin: 80px 0px 0px 0px;
+  margin: 5rem 0rem 0rem 0rem;
   width: 100%;
   display: flex;
-  padding-left: 100px;
-  padding-right: 100px;
-  padding-bottom: 258px;
+  padding-left: 6.25rem;
+  padding-right: 6.25rem;
+  padding-bottom: 16.125rem;
   flex-direction: column;
+
   h1 {
     font-family: Raleway;
-    font-size: 32px;
+    font-size: 2rem;
     font-weight: 700;
     line-height: 40px;
     letter-spacing: 0em;
   }
   .cart-section {
-    margin-top: 80px;
-    margin-bottom: 59px;
+    margin-top: 5rem;
+    margin-bottom: 3.6875rem;
     width: 100%;
   }
 `;

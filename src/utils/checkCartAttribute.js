@@ -17,6 +17,7 @@ export const checkCartItemAtrributes = (
   );
 
   let checkIfAttributeMatch;
+  let matchArray = [];
   // loop through the attribute keys and check if they match
   for (
     let i = 0;
@@ -32,10 +33,12 @@ export const checkCartItemAtrributes = (
         cartItemToAddAttribute[
           currentCartKeys[i]
         ];
-
-      return checkIfAttributeMatch;
+      // append the boolean values the array
+      matchArray.push(checkIfAttributeMatch);
+    } else {
+      return false;
     }
-
-    return false;
   }
+
+  return !matchArray.includes(false);
 };

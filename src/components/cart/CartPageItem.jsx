@@ -4,11 +4,11 @@ import { Attributes } from '../styledComponents/components';
 import {
   Box,
   Div,
+  UpgradedMinus,
+  UpgradedPlus,
 } from '../styledComponents/components';
 import { connect } from 'react-redux';
 import { getCurrentCurrency } from '../../utils/getCurrentCurrency';
-import { ReactComponent as Plus } from '../../assets/plus.svg';
-import { ReactComponent as Minus } from '../../assets/minus.svg';
 import { ReactComponent as Left } from '../../assets/left.svg';
 import { ReactComponent as Right } from '../../assets/right.svg';
 
@@ -221,12 +221,11 @@ class CartPageItem extends Component {
                 flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                marginRight: '10px',
+                marginRight: '24px',
               }}>
-              <Minus
-                style={{
-                  cursor: 'pointer',
-                }}
+              <UpgradedMinus
+                height="45px"
+                width="45px"
                 onClick={() => removeItem()}
               />
               <div
@@ -239,10 +238,9 @@ class CartPageItem extends Component {
                 }}>
                 <h3>{quantity}</h3>
               </div>
-              <Plus
-                style={{
-                  cursor: 'pointer',
-                }}
+              <UpgradedPlus
+                height="45px"
+                width="45px"
                 onClick={() => addItem()}
               />
             </div>
@@ -293,7 +291,7 @@ export default connect(MapStateToProps)(
 );
 
 const Container = styled.div`
-  width: 1098px;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -306,7 +304,7 @@ const PictureChanger = styled.div`
   justify-content: end;
   width: 141px;
   height: 185px;
-  margin-left: 33px;
+  margin-left: 69px;
   padding-bottom: 16px;
   position: absolute;
   div {

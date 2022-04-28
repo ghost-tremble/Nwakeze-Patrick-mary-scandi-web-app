@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+import { ReactComponent as Plus } from '../../assets/plus.svg';
+import { ReactComponent as Minus } from '../../assets/minus.svg';
 export const Div = styled.div`
   border: ${(props) =>
     props.$highlight
@@ -60,4 +62,14 @@ export const Attributes = styled.div`
     display: flex;
     flex-direction: row;
   }
+`;
+export const UpgradedPlus = styled(Plus)`
+  height: ${(props) => props.height};
+  width: ${(props) => props.width};
+  cursor: pointer;
+`;
+export const UpgradedMinus = styled(Minus)`
+  height: ${(props) => props.height};
+  width: ${(props) => props.width};
+  cursor: pointer;
 `;

@@ -2,11 +2,11 @@ import { Component } from 'react';
 import styled from 'styled-components';
 import { getCurrentCurrency } from '../../utils/getCurrentCurrency';
 import { connect } from 'react-redux';
-import { ReactComponent as Plus } from '../../assets/plus.svg';
-import { ReactComponent as Minus } from '../../assets/minus.svg';
 
 import {
   Box,
+  UpgradedMinus,
+  UpgradedPlus,
   Div,
   Attributes,
 } from '../styledComponents/components';
@@ -156,7 +156,9 @@ class CartItem extends Component {
                 style={{
                   cursor: 'pointer',
                 }}>
-                <Plus onClick={() => addItem()} />
+                <UpgradedPlus
+                  onClick={() => addItem()}
+                />
               </div>
               <div
                 style={{
@@ -172,7 +174,7 @@ class CartItem extends Component {
                 style={{
                   cursor: 'pointer',
                 }}>
-                <Minus
+                <UpgradedMinus
                   onClick={() => removeItem()}
                 />
               </div>
