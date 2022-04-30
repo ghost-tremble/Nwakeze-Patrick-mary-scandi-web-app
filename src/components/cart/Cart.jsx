@@ -1,6 +1,6 @@
-import { Component, createRef } from 'react';
+import { Component } from 'react';
 import styled from 'styled-components';
-import { closeOnClickOut } from '../../utils/closeOnClickOut';
+
 import { createStructuredSelector } from 'reselect';
 import CartItem from './Cartitem';
 import { connect } from 'react-redux';
@@ -16,24 +16,9 @@ import {
   selectCartTotal,
   selectCurrentCurrency,
 } from '../../redux/reducers/cart/cart.selector';
-import {
-  toggleCartHidden,
-  closeCartOnClickOut,
-} from '../../redux/reducers/cart/cart.actions';
+import { toggleCartHidden } from '../../redux/reducers/cart/cart.actions';
 // cart for showing products
 class Cart extends Component {
-  constructor(props) {
-    super(props);
-    this.wrapperRef = createRef(null);
-  }
-
-  componentDidMount() {
-    closeOnClickOut(
-      this.wrapperRef,
-      this.props.closeCartOnClickOut
-    );
-  }
-
   render() {
     const {
       hidden,
@@ -47,107 +32,73 @@ class Cart extends Component {
     } = this.props;
 
     return (
-      <CartOverlay hidden={hidden}>
-        <Container ref={this.wrapperRef}>
-          <div>
-            <H2>
-              My Bag,{' '}
-              <p
-                style={{
-                  fontFamily: 'Raleway',
-                  fontSize: '16px',
-                  fontWeight: 500,
-                  lineHeight: '26px',
-                  letterSpacing: '0em',
-                  textAlign: 'right',
-                  display: 'inline',
-                }}>
-                {cartSize} items
+      <Container hidden={hidden}>
+        <div>
+          <H2>
+            My Bag, <p>{cartSize} items</p>
+          </H2>
+
+          {cartItems.map((item, index) => {
+            const {
+              name,
+              selectedAttributes,
+              brand,
+              prices,
+              gallery,
+              attributes,
+              id,
+            } = item;
+
+            return (
+              <CartItem
+                key={index}
+                id={id}
+                name={name}
+                brand={brand}
+                prices={prices}
+                image={gallery[0]}
+                attributes={attributes}
+                quantity={item.quantity}
+                addItem={() => addItem(item)}
+                selectedAttributes={
+                  selectedAttributes
+                }
+                removeItem={() =>
+                  removeItem(item)
+                }
+              />
+            );
+          })}
+
+          <Total>
+            <div className="title">
+              <p>Total</p>
+            </div>
+            <div className="price">
+              <p>
+                {currency}
+                {Number(
+                  cartTotal
+                ).toLocaleString()}
               </p>
-            </H2>
-
-            {cartItems.map((item, index) => {
-              const {
-                name,
-                selectedAttributes,
-                brand,
-                prices,
-                gallery,
-                attributes,
-                id,
-              } = item;
-
-              return (
-                <CartItem
-                  key={index}
-                  id={id}
-                  name={name}
-                  brand={brand}
-                  prices={prices}
-                  image={gallery[0]}
-                  attributes={attributes}
-                  quantity={item.quantity}
-                  addItem={() => addItem(item)}
-                  selectedAttributes={
-                    selectedAttributes
-                  }
-                  removeItem={() =>
-                    removeItem(item)
-                  }
-                />
-              );
-            })}
-
-            <Total>
-              <div>
-                <p
-                  style={{
-                    fontFamily:
-                      "'Roboto', sans-serif",
-
-                    fontWeight: '500',
-                    fontSize: '16px',
-                    lineHeight: '112%',
-                  }}>
-                  Total
-                </p>
-              </div>
-              <div
-                style={{
-                  marginLeft: 'auto',
-                }}>
-                <p
-                  style={{
-                    fontFamily: 'Raleway',
-
-                    fontWeight: '700',
-                    fontSize: '16px',
-                    lineHeight: '160%',
-                  }}>
-                  {currency}
-                  {Number(
-                    cartTotal
-                  ).toLocaleString()}
-                </p>
-              </div>
-            </Total>
-            <ButtonContainer>
-              <Button
-                to="/cart"
-                onClick={() => closeCart()}
-                margin="12px">
-                VIEW BAG
-              </Button>
-              <Button
-                to="/checkout"
-                background="#5ECE7B"
-                color="#FFFFFF">
-                CHECK OUT
-              </Button>
-            </ButtonContainer>
-          </div>
-        </Container>
-      </CartOverlay>
+            </div>
+          </Total>
+          <ButtonContainer>
+            <Button
+              to="/cart"
+              onClick={() => closeCart()}
+              margin="12px">
+              VIEW BAG
+            </Button>
+            <Button
+              to="/checkout"
+              background="#5ECE7B"
+              color="#FFFFFF">
+              CHECK OUT
+            </Button>
+          </ButtonContainer>
+        </div>
+      </Container>
     );
   }
 }
@@ -167,8 +118,6 @@ const MapDispatchToProps = (dispatch) => {
     addItem: (data) => dispatch(addItem(data)),
     removeItem: (data) =>
       dispatch(removeItem(data)),
-    closeCartOnClickOut: (data) =>
-      dispatch(closeCartOnClickOut(data)),
   };
 };
 export default connect(
@@ -176,18 +125,12 @@ export default connect(
   MapDispatchToProps
 )(Cart);
 
-const CartOverlay = styled.div`
-  position: absolute;
-  top: 4.9rem;
-  height: 100vh;
-  width: 100%;
-  display: ${(props) =>
-    props.hidden ? 'none' : 'block'};
-  background-color: rgba(57, 55, 72, 0.22);
-`;
 const Container = styled.div`
   height: 33.75em;
+  top: 4.9rem;
   width: 20.3em;
+  transform: ${(props) =>
+    props.hidden ? 'scale(0)' : 'scale(1)'};
   position: absolute;
   background-color: #ffffff;
   padding: 0.5rem 1rem 1.24rem;
@@ -197,18 +140,43 @@ const Container = styled.div`
 `;
 
 const H2 = styled.h2`
-font-family: Raleway;
-font-size: 16px;
-font-weight: 700;
-line-height: 26px;
-letter-spacing: 0em;
-text-align: left;
-margin-bottom:25px;
-}
+  font-family: Raleway;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 26px;
+  letter-spacing: 0em;
+  text-align: left;
+  margin-bottom: 25px;
+  p {
+    font-family: Raleway;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 26px;
+    letter-spacing: 0em;
+    text-align: right;
+    display: inline;
+  }
 `;
 const Total = styled.div`
   display: flex;
   margin-bottom: 2.19rem;
+  .title {
+    p {
+      font-family: Roboto, sans-serif;
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 112%;
+    }
+  }
+  .price {
+    margin-left: auto;
+    p {
+      font-family: Raleway;
+      font-weight: 700;
+      font-size: 16px;
+      line-height: 160%;
+    }
+  }
 `;
 const ButtonContainer = styled.div`
   display: flex;

@@ -8,6 +8,10 @@ export const fetchCategories = (data) => ({
   type: InventoryActionTypes.GET_CATEGORIES_DATA,
   payload: data,
 });
+export const fetchSingleProduct = (data) => ({
+  type: InventoryActionTypes.GET_SINGLE_PRODUCT,
+  payload: data,
+});
 
 export const updateLoadingState = (data) => ({
   type: InventoryActionTypes.IS_LOADING,

@@ -3,7 +3,7 @@ import { InventoryActionTypes } from './inventory.type';
 const initialState = {
   isLoading: true,
   catalog: [],
-
+  singleProduct: {},
   categories: [],
   errorString: '',
 };
@@ -23,6 +23,12 @@ const inventoryReducer = (
         ...state,
 
         categories: action.payload,
+      };
+    }
+    case InventoryActionTypes.GET_SINGLE_PRODUCT: {
+      return {
+        ...state,
+        singleProduct: action.payload,
       };
     }
     case InventoryActionTypes.IS_LOADING: {

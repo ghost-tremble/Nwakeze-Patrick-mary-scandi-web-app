@@ -47,4 +47,33 @@ export const categories = gql`
   }
 `;
 
+// singleProduct query
+
+export const singleProduct = gql`
+  query GetSingleProduct($productId: String!) {
+    product(id: $productId) {
+      id
+      name
+      brand
+      gallery
+      inStock
+      description
+      attributes {
+        type
+        name
+        items {
+          value
+        }
+      }
+      prices {
+        currency {
+          symbol
+          label
+        }
+        amount
+      }
+    }
+  }
+`;
+
 export default category;

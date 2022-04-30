@@ -1,5 +1,6 @@
-import { Component } from 'react';
+import { Component, createRef } from 'react';
 import { Link } from 'react-router-dom';
+import { closeOnClickOut } from '../utils/closeOnClickOut';
 import { createStructuredSelector } from 'reselect';
 import styled from 'styled-components';
 import { ReactComponent as LogoImage } from '../assets/headerIcons/shop-logo.svg';
@@ -9,10 +10,25 @@ import { ReactComponent as CartIcon } from '../assets/headerIcons/cart.svg';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { toggleOpenCurrecies } from '../redux/reducers/currency/currency.action';
-import { toggleCartHidden } from '../redux/reducers/cart/cart.actions';
+import {
+  toggleCartHidden,
+  closeCartOnClickOut,
+} from '../redux/reducers/cart/cart.actions';
 import { selectCartItemsCount } from '../redux/reducers/cart/cart.selector';
+import Cart from './cart/Cart';
 
 class Header extends Component {
+  constructor(props) {
+    super(props);
+    this.wrapperRef = createRef(null);
+  }
+
+  componentDidMount() {
+    closeOnClickOut(
+      this.wrapperRef,
+      this.props.closeCartOnClickOut
+    );
+  }
   render() {
     const {
       categories,
@@ -44,15 +60,12 @@ class Header extends Component {
             )}
           </Ul>
         </div>
-        <div
-          style={{
-            flex: 0.5,
-            textAlign: 'center',
-          }}>
+        <LogoContainer>
           <IconButton>
             <LogoImage />
           </IconButton>
-        </div>
+        </LogoContainer>
+
         <IconGroup>
           <IconButton
             onClick={() =>
@@ -64,15 +77,21 @@ class Header extends Component {
               <Currency2 />
             )}
           </IconButton>
-          <IconButton
-            onClick={() => this.props.showCart()}>
-            <CartIcon />
-            {cartSize.number > 0 && (
-              <ItemCount>
-                {cartSize.number}
-              </ItemCount>
-            )}
-          </IconButton>
+          <div ref={this.wrapperRef}>
+            <IconButton
+              className="cartIcon"
+              onClick={(e) => {
+                this.props.showCart();
+              }}>
+              <CartIcon />
+              {cartSize.number > 0 && (
+                <ItemCount>
+                  {cartSize.number}
+                </ItemCount>
+              )}
+            </IconButton>
+            <Cart />
+          </div>
         </IconGroup>
       </Container>
     );
@@ -82,6 +101,8 @@ const MapStateToProps = (state) => {
   return {
     categories: state.inventory.categories,
     hidden: state.currency.hidden,
+    currentCurrency:
+      state.currency.currentCurrency,
     cartSize: createStructuredSelector({
       number: selectCartItemsCount,
     })(state),
@@ -92,6 +113,8 @@ const MapDispatchToProps = (dispatch) => {
     showCurrency: () =>
       dispatch(toggleOpenCurrecies()),
     showCart: () => dispatch(toggleCartHidden()),
+    closeCartOnClickOut: () =>
+      dispatch(closeCartOnClickOut()),
   };
 };
 export default withRouter(
@@ -171,6 +194,7 @@ const IconButton = styled.div`
   padding: 0px 10px 0px 10px;
   cursor: pointer;
   display: flex;
+
   width: max-content;
   justify-content: center;
   align-items: center;
@@ -196,4 +220,9 @@ const ItemCount = styled.div`
   justify-content: center;
   text-align: center;
   text-transform: uppercase;
+`;
+
+const LogoContainer = styled.div`
+  flex: 0.5;
+  text-align: 'center';
 `;

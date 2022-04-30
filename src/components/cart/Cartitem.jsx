@@ -25,56 +25,18 @@ class CartItem extends Component {
     } = this.props;
     return (
       <Container>
-        <div style={{}}>
-          <div
-            style={{
-              marginBottom: '25px',
-            }}>
-            <p
-              style={{
-                fontFamily: 'Raleway',
-                fontSize: '16',
-                fontWeight: '300',
-                lineHeight: '26px',
-                letterSpacing: '0px',
-                textAlign: 'left',
-                width: '136px',
-                marginBottom: '5px',
-              }}>
-              {brand}
-            </p>
-            <p
-              style={{
-                fontFamily: 'Raleway',
-                fontSize: '16',
-                fontWeight: '300',
-                lineHeight: '26px',
-                letterSpacing: '0px',
-                textAlign: 'left',
-                width: '136px',
-                marginBottom: '5px',
-              }}>
-              {name}
-            </p>
-            <h3
-              style={{
-                fontFamily: 'Raleway',
-                fontSize: '16px',
-                fontWeight: '500px',
-                lineHeight: '26px',
-
-                letterSpacing: '0em',
-              }}>
+        <div>
+          <Details>
+            <p className="cartBrand">{brand}</p>
+            <p className="cartBrand">{name}</p>
+            <h3>
               {getCurrentCurrency(
                 prices,
                 this.props.currentCurrency
               )}
             </h3>
-          </div>
-          <Attributes
-            style={{
-              display: 'flex',
-            }}>
+          </Details>
+          <Attributes>
             {attributes.map((attr, index) => {
               return (
                 <div
@@ -140,53 +102,25 @@ class CartItem extends Component {
         </div>
         <div>
           {/*  image contsine*/}
-          <div
-            style={{
-              display: 'flex',
-            }}>
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                marginRight: '10px',
-              }}>
-              <div
-                style={{
-                  cursor: 'pointer',
-                }}>
+          <div className="image-container">
+            <QuantityControl>
+              <div>
                 <UpgradedPlus
                   onClick={() => addItem()}
                 />
               </div>
-              <div
-                style={{
-                  width: '24px',
-                  height: '24px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
+              <div className="quantity">
                 <h3>{quantity}</h3>
               </div>
-              <div
-                style={{
-                  cursor: 'pointer',
-                }}>
+              <div>
                 <UpgradedMinus
                   onClick={() => removeItem()}
                 />
               </div>
-            </div>
-            <div style={{}}>
-              <img
+            </QuantityControl>
+            <div>
+              <CartImage
                 src={image}
-                style={{
-                  width: '6.6rem',
-                  height: '8.9rem',
-                  objectFit: 'contain',
-                }}
                 alt="cartimage"
               />
             </div>
@@ -208,4 +142,56 @@ const Container = styled.div`
   display: flex;
   justify-content: space-between;
   margin: 0px 0px 2.75em 0px;
+  .image-container {
+    display: flex;
+  }
+`;
+
+const Details = styled.div`
+  margin-bottom: 0.5rem;
+  .cartBrand {
+    font-family: Raleway;
+    font-size: 1rem;
+    font-weight: 300;
+    lineheight: 26px;
+    letter-spacing: 0px;
+    text-align: left;
+    width: 136px;
+    margin-bottom: 5px;
+  }
+  h3 {
+    font-family: Raleway;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 26px;
+    letter-spacing: 0em;
+  }
+`;
+
+const QuantityControl = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  margin-right: 8px;
+  .quantity {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    h3 {
+      font-family: Raleway;
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 26px;
+      letter-spacing: 0em;
+    }
+  }
+`;
+
+const CartImage = styled.img`
+  width: 6.6rem;
+  height: 8.9rem;
+  object-fit: contain;
 `;

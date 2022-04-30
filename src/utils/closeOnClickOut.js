@@ -4,7 +4,7 @@ export const closeOnClickOut = (ref, action) => {
       ref.current &&
       !ref.current.contains(event.target)
     ) {
-      action(true);
+      action();
       console.log('action has been triggered');
     }
   }

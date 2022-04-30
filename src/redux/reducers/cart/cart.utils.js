@@ -11,7 +11,6 @@ export const addItemToCart = (
         cartItemToAdd.selectedAttributes
       )
   );
-  console.log(existingCartItem);
 
   if (existingCartItem) {
     return cartItems.map((cartItem) =>

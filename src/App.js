@@ -10,11 +10,11 @@ import Category from './components/Category';
 // import HomePage from './pages/Home';
 import Header from './components/Header';
 import CartPage from './pages/CartPage';
-import Cart from './components/cart/Cart';
 import './_app.css';
 import ProductPage from './pages/ProductPage';
 import Currency from './components/Currency';
 import Loader from './components/Loader';
+import CartOverLay from './components/cart/CartOverLay';
 class App extends PureComponent {
   render() {
     const { isLoading, categories } = this.props;
@@ -34,7 +34,7 @@ class App extends PureComponent {
                   zIndex: '100',
                 }}>
                 <Header />
-                <Cart />
+                <CartOverLay />
                 <Currency />
               </div>
             </Route>

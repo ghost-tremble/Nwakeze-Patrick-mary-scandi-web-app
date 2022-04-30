@@ -16,8 +16,6 @@ class CartPageItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedAttributes:
-        this.props.selectedAttributes,
       index: 0,
     };
   }
@@ -52,6 +50,7 @@ class CartPageItem extends Component {
   render() {
     const {
       name,
+      selectedAttributes,
       brand,
       image,
       attributes,
@@ -63,68 +62,24 @@ class CartPageItem extends Component {
     return (
       <Container>
         {' '}
-        <div style={{}}>
-          <div
-            style={{
-              marginBottom: '25px',
-            }}>
-            <p
-              style={{
-                fontFamily: 'Raleway',
-                fontSize: '30px',
-                fontWeight: '700',
-                letterSpacing: '0px',
-
-                marginBottom: '16px',
-              }}>
-              {brand}
-            </p>
-            <p
-              style={{
-                fontFamily: 'Raleway',
-                fontStyle: 'normal',
-                fontWeight: '400',
-                fontSize: '30px',
-                lineHeight: '27px',
-                marginBottom: '20px',
-              }}>
-              {name}
-            </p>
-            <h3
-              style={{
-                fontFamily: 'Raleway',
-                fontSize: '24px',
-                fontWeight: '700px',
-                lineHeight: '24px',
-
-                letterSpacing: '0em',
-              }}>
+        <div>
+          <Details>
+            <h1>{brand}</h1>
+            <p>{name}</p>
+            <h3>
               {getCurrentCurrency(
                 prices,
                 this.props.currentCurrency
               )}
             </h3>
-          </div>
-          <Attributes
-            style={{
-              display: 'flex',
-            }}>
+          </Details>
+          <Attributes>
             {attributes.map((attr, index) => {
               return (
                 <div
                   key={index}
                   className="attribute-selection">
-                  <h3
-                    style={{
-                      fontFamily:
-                        'Roboto Condensed',
-                      fontZize: '18px',
-                      fontWeight: '700',
-                      lineHeight: '18px',
-                      letterSpacing: '0em',
-                    }}>
-                    {attr.name}:
-                  </h3>
+                  <h3>{attr.name}:</h3>
 
                   <div className="box-container">
                     {attr.items.map(
@@ -135,8 +90,7 @@ class CartPageItem extends Component {
                             'swatch' ? (
                               <Div
                                 $highlight={
-                                  this.state
-                                    .selectedAttributes[
+                                  selectedAttributes[
                                     attr.name
                                   ] ===
                                   attribute.value
@@ -151,45 +105,13 @@ class CartPageItem extends Component {
                                   }
                                   height="32px"
                                   width="32px"
-                                  marginRight="0px"
-                                  onClick={() => {
-                                    this.setState(
-                                      {
-                                        ...this
-                                          .state,
-                                        selectedAttributes:
-                                          {
-                                            ...this
-                                              .state
-                                              .selectedAttributes,
-
-                                            [attr.name]:
-                                              attribute.value,
-                                          },
-                                      }
-                                    );
-                                  }}></Box>
+                                  marginRight="0px"></Box>
                               </Div>
                             ) : (
                               <Box
-                                onClick={() =>
-                                  this.setState({
-                                    ...this.state,
-                                    selectedAttributes:
-                                      {
-                                        ...this
-                                          .state
-                                          .selectedAttributes,
-
-                                        [attr.name]:
-                                          attribute.value,
-                                      },
-                                  })
-                                }
                                 key={index}
                                 $selected={
-                                  this.state
-                                    .selectedAttributes[
+                                  selectedAttributes[
                                     attr.name
                                   ] ===
                                   attribute.value
@@ -211,45 +133,24 @@ class CartPageItem extends Component {
         </div>
         <div>
           {/*  image contsine*/}
-          <div
-            style={{
-              display: 'flex',
-            }}>
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                marginRight: '24px',
-              }}>
+          <div className="inner">
+            <CartPageQuantityControl>
               <UpgradedMinus
                 height="45px"
                 width="45px"
                 onClick={() => removeItem()}
               />
-              <div
-                style={{
-                  width: '24px',
-                  height: '24px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
+              <Quantity>
                 <h3>{quantity}</h3>
-              </div>
+              </Quantity>
               <UpgradedPlus
                 height="45px"
                 width="45px"
                 onClick={() => addItem()}
               />
-            </div>
+            </CartPageQuantityControl>
             <div>
-              <img
-                style={{
-                  width: '141px',
-                  height: '185px',
-                }}
+              <SliderImage
                 src={image[this.state.index]}
                 alt="slidercartimage"
               />
@@ -296,6 +197,9 @@ const Container = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-bottom: 20px;
+  .inner {
+    display: flex;
+  }
 `;
 
 const PictureChanger = styled.div`
@@ -314,4 +218,52 @@ const PictureChanger = styled.div`
     margin-right: 16px;
     margin-left: 8px;
   }
+`;
+
+const Details = styled.div`
+  margin-bottom: 25px;
+  h1 {
+    font-family: Raleway;
+    font-size: 30px;
+    font-weight: 700;
+    letter-spacing: 0px;
+    margin-bottom: 16px;
+  }
+  p {
+    font-family: Raleway;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 27px;
+    margin-bottom: 20px;
+  }
+  h3 {
+    font-family: Raleway;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 32px;
+    letter-spacing: 0em;
+    text-align: left;
+  }
+`;
+
+const SliderImage = styled.img`
+  width: 141px;
+  height: 185px;
+`;
+
+const CartPageQuantityControl = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  margin-right: 24px;
+`;
+
+const Quantity = styled.div`
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;

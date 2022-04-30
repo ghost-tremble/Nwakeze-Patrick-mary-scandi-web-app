@@ -3,7 +3,7 @@ export const getCurrentCurrency = (
   currentSymbol
 ) => {
   const value = pricesArray
-    .filter(
+    ?.filter(
       (item) =>
         item.currency.symbol === currentSymbol
     )

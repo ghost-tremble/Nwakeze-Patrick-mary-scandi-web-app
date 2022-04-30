@@ -16,7 +16,7 @@ const cartReducer = (
     case CartActionTypes.CLOSE_ON_CLICK_OUT:
       return {
         ...state,
-        hidden: action.payload,
+        hidden: true,
       };
     case CartActionTypes.TOGGLE_CART_HIDDEN:
       return {
@@ -50,7 +50,7 @@ const cartReducer = (
       };
 
     default:
-      return state;
+      return { ...state };
   }
 };
 

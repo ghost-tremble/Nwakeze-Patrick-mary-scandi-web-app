@@ -7,19 +7,14 @@ import { addItem } from '../redux/reducers/cart/cart.actions';
 import { withRouter } from 'react-router-dom';
 // single Product Item
 class ProductItem extends Component {
-  // constructor(props) {
-  //     super(props)
-  // }
-
   render() {
-    const { addItemToCart, history } = this.props;
+    const { history } = this.props;
     const {
       name,
       image,
       stock,
       productLink,
       prices,
-      item,
     } = this.props;
     return (
       <>
@@ -42,14 +37,7 @@ class ProductItem extends Component {
           </div>
 
           <div className="addToCart">
-            <AddCart
-              onClick={(e) => {
-                e.stopPropagation();
-                addItemToCart({
-                  ...item,
-                  selectedAttributes: {},
-                });
-              }}>
+            <AddCart>
               <CartIcon />
             </AddCart>
           </div>
@@ -126,14 +114,13 @@ const ImageContainer = styled.div`
   width: 354px;
   height: 330px;
   margin: 0px 0px 1.31rem;
-
   justify-content: center;
   display: flex;
   align-items: center;
 `;
 const Image = styled.img`
-  width: 354px;
-  height: 330px;
+  width: 22.25rem;
+  height: 21.125rem;
   object-fit: contain;
 `;
 const Details = styled.div``;

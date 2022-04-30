@@ -32,7 +32,7 @@ export const Box = styled.div`
   font-size: 16px;
   line-height: 112%;
   letter-spacing: 0.05em;
-  cursor: pointer;
+  cursor: ${(props) => props.cursor};
   font-size: ${(props) =>
     props.fontSize || '16px'};
   color: ${(props) =>
@@ -44,6 +44,7 @@ export const Box = styled.div`
 `;
 
 export const Attributes = styled.div`
+  display: flex;
   flex-direction: column;
   h3 {
     font-family: Raleway;

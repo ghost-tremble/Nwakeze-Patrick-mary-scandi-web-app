@@ -1,216 +1,279 @@
-import { Component, Fragment } from 'react';
+import { Component } from 'react';
 import styled from 'styled-components';
+import ErrorBar from '../components/ErrorBar';
 import parse from 'html-react-parser';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { addItem } from '../redux/reducers/cart/cart.actions';
 import { getCurrentCurrency } from '../utils/getCurrentCurrency';
+import client from '../graphql/client';
+import { fetchSingleProduct } from '../redux/reducers/inventory/inventory.action';
+import { singleProduct } from '../graphql/queries';
 import {
   Box,
   Div,
 } from '../components/styledComponents/components';
+import Loader from '../components/Loader';
 class ProductPage extends Component {
   constructor(props) {
     super(props);
-    const { products } =
-      this.props.productItems.category;
-    const productId = this.props.match.params.id;
-    const productData = products.filter(
-      (product) => product.id === productId
-    );
-
     this.state = {
-      productData: productData,
       index: 0,
+      errorString: '',
       selectedAttributes: {},
+      isLoading: true,
     };
   }
-
+  componentDidMount() {
+    client
+      .query({
+        query: singleProduct,
+        variables: {
+          productId: this.props.match.params.id,
+        },
+      })
+      .then((result) => {
+        this.props.fetchSingleProduct(
+          result.data
+        );
+        this.setState((prevState) => ({
+          ...prevState,
+          isLoading: false,
+        }));
+      });
+  }
   render() {
-    // productData
-    const productData = this.state.productData[0];
+    // product
+    const { product } = this.props.product;
+    const { isLoading } = this.state;
+    console.log(product);
     const { addItemToCart } = this.props;
-    const description = parse(
-      productData.description
-    );
+
     return (
-      <Container>
-        <Section
-          marginRight={'20px'}
-          width={''}
-          scroll="auto"
-          overflow="hidden"
-          height="19.04875rem">
-          {productData.gallery.map(
-            (item, index) => {
-              return (
-                <SelectImage
-                  key={index}
-                  onClick={() =>
-                    this.setState({
-                      ...this.state,
-                      index: index,
-                    })
-                  }>
-                  <img
-                    src={item}
-                    className="image"
-                    alt="product"
-                  />
-                </SelectImage>
-              );
-            }
-          )}
-        </Section>
-        <Section
-          marginRight={'100px'}
-          width={'610px'}
-          background="#fff">
-          <Image
-            src={
-              productData.gallery[
-                this.state.index
-              ]
-            }
-          />
-        </Section>
-        <Section
-          marginRight={'20px'}
-          width={'292px'}>
-          <div className="productName">
-            <h2>{productData.brand}</h2>
-            <p>{productData.name}</p>
-          </div>
+      <>
+        {isLoading ? (
+          <Loader />
+        ) : (
+          <Container>
+            {this.state.errorString ? (
+              <ErrorBar
+                errorString={
+                  this.state.errorString
+                }
+              />
+            ) : (
+              ''
+            )}
+            <Section
+              marginRight={'20px'}
+              width={''}
+              scroll="auto"
+              overflow="hidden"
+              height="31rem">
+              {product.gallery.map(
+                (item, index) => {
+                  return (
+                    <SelectImage
+                      key={index}
+                      onClick={() =>
+                        this.setState({
+                          ...this.state,
+                          index: index,
+                        })
+                      }>
+                      <img
+                        src={item}
+                        className="image"
+                        alt="product"
+                      />
+                    </SelectImage>
+                  );
+                }
+              )}
+            </Section>
+            <Section
+              marginRight={'100px'}
+              width={'610px'}
+              background="#fff">
+              <Image
+                src={
+                  product.gallery[
+                    this.state.index
+                  ]
+                }
+              />
+            </Section>
+            <Section
+              marginRight={'20px'}
+              width={'292px'}>
+              <div className="productName">
+                <h2>{product.brand}</h2>
+                <p>{product.name}</p>
+              </div>
 
-          {/*         
-        product attributes selection */}
-          {productData.attributes.map(
-            (attr, index) => {
-              return (
-                <div
-                  key={index}
-                  className="attribute-selection">
-                  <h3>{attr.name}</h3>
+              {/*
+          product attributes selection */}
+              {product.attributes.map(
+                (attr, index) => {
+                  return (
+                    <div
+                      key={index}
+                      className="attribute-selection">
+                      <h3>{attr.name}</h3>
 
-                  <div className="box-container">
-                    {attr.items.map(
-                      (attribute, index) => {
-                        return (
-                          <div key={index}>
-                            {attr.type ===
-                            'swatch' ? (
-                              <Div
-                                key={index}
-                                $highlight={
-                                  this.state
-                                    .selectedAttributes[
-                                    attr.name
-                                  ] ===
-                                  attribute.value
-                                    ? true
-                                    : false
-                                }>
-                                <Box
-                                  border="none"
-                                  background={
-                                    attribute.value
-                                  }
-                                  height="32px"
-                                  width="32px"
-                                  marginRight="0px"
-                                  onClick={() => {
-                                    this.setState(
-                                      {
-                                        ...this
-                                          .state,
-                                        selectedAttributes:
+                      <div className="box-container">
+                        {attr.items.map(
+                          (attribute, index) => {
+                            return (
+                              <div key={index}>
+                                {attr.type ===
+                                'swatch' ? (
+                                  <Div
+                                    key={index}
+                                    $highlight={
+                                      this.state
+                                        .selectedAttributes[
+                                        attr.name
+                                      ] ===
+                                      attribute.value
+                                        ? true
+                                        : false
+                                    }>
+                                    <Box
+                                      cursor="pointer"
+                                      border="none"
+                                      background={
+                                        attribute.value
+                                      }
+                                      height="32px"
+                                      width="32px"
+                                      marginRight="0px"
+                                      onClick={() => {
+                                        this.setState(
                                           {
                                             ...this
-                                              .state
-                                              .selectedAttributes,
+                                              .state,
+                                            selectedAttributes:
+                                              {
+                                                ...this
+                                                  .state
+                                                  .selectedAttributes,
 
-                                            [attr.name]:
-                                              attribute.value,
-                                          },
-                                      }
-                                    );
-                                  }}></Box>
-                              </Div>
-                            ) : (
-                              <Box
-                                onClick={() =>
-                                  this.setState({
-                                    ...this.state,
-                                    selectedAttributes:
-                                      {
-                                        ...this
-                                          .state
-                                          .selectedAttributes,
+                                                [attr.name]:
+                                                  attribute.value,
+                                              },
+                                          }
+                                        );
+                                      }}></Box>
+                                  </Div>
+                                ) : (
+                                  <Box
+                                    cursor="pointer"
+                                    onClick={() =>
+                                      this.setState(
+                                        {
+                                          ...this
+                                            .state,
+                                          selectedAttributes:
+                                            {
+                                              ...this
+                                                .state
+                                                .selectedAttributes,
 
-                                        [attr.name]:
-                                          attribute.value,
-                                      },
-                                  })
-                                }
-                                key={index}
-                                $selected={
-                                  this.state
-                                    .selectedAttributes[
-                                    attr.name
-                                  ] ===
-                                  attribute.value
-                                    ? true
-                                    : false
-                                }>
-                                {attribute.value}
-                              </Box>
-                            )}
-                          </div>
-                        );
-                      }
-                    )}
-                  </div>
-                </div>
-              );
-            }
-          )}
-
-          <div className="price">
-            <h3>PRICE:</h3>
-
-            <h4>
-              {getCurrentCurrency(
-                productData.prices,
-                this.props.currentCurrency
+                                              [attr.name]:
+                                                attribute.value,
+                                            },
+                                        }
+                                      )
+                                    }
+                                    key={index}
+                                    $selected={
+                                      this.state
+                                        .selectedAttributes[
+                                        attr.name
+                                      ] ===
+                                      attribute.value
+                                        ? true
+                                        : false
+                                    }>
+                                    {
+                                      attribute.value
+                                    }
+                                  </Box>
+                                )}
+                              </div>
+                            );
+                          }
+                        )}
+                      </div>
+                    </div>
+                  );
+                }
               )}
-            </h4>
-          </div>
-          <Button
-            color="#ffffff"
-            background="#5ECE7B"
-            width="292px"
-            height="52px"
-            onClick={() =>
-              addItemToCart({
-                ...productData,
-                selectedAttributes:
-                  this.state.selectedAttributes,
-              })
-            }>
-            ADD TO CART
-          </Button>
-          <div className="description">
-            {description}
-          </div>
-        </Section>
-      </Container>
+
+              <div className="price">
+                <h3>PRICE:</h3>
+
+                <h4>
+                  {getCurrentCurrency(
+                    product.prices,
+                    this.props.currentCurrency
+                  )}
+                </h4>
+              </div>
+              <Button
+                color="#ffffff"
+                background="#5ECE7B"
+                width="292px"
+                height="52px"
+                onClick={() => {
+                  if (product.inStock === false) {
+                    return this.setState({
+                      ...this.state,
+                      errorString:
+                        'this product is out of stock',
+                    });
+                  }
+                  if (
+                    Object.keys(
+                      this.state
+                        .selectedAttributes
+                    ).length !==
+                    product.attributes.length
+                  ) {
+                    return this.setState({
+                      ...this.state,
+                      errorString:
+                        'please select Attributes',
+                    });
+                  }
+                  this.setState({
+                    ...this.state,
+                    errorString: '',
+                  });
+                  addItemToCart({
+                    ...product,
+                    selectedAttributes:
+                      this.state
+                        .selectedAttributes,
+                  });
+                }}>
+                ADD TO CART
+              </Button>
+              <div className="description">
+                {parse(product.description)}
+              </div>
+            </Section>
+          </Container>
+        )}
+      </>
     );
   }
 }
 
 const MapStateToProps = (state) => {
   return {
-    productItems: state.inventory.catalog,
+    product: state.inventory.singleProduct,
     currentCurrency:
       state.currency.currentCurrency,
   };
@@ -219,6 +282,8 @@ const MapDispatchToProps = (dispatch) => {
   return {
     addItemToCart: (item) =>
       dispatch(addItem(item)),
+    fetchSingleProduct: (data) =>
+      dispatch(fetchSingleProduct(data)),
   };
 };
 export default withRouter(
@@ -341,17 +406,18 @@ const SelectImage = styled.div`
   cursor: pointer;
   width: 176.65px;
   height: 87.61px;
-  margin: 0px 0px 32px 0px;
+
+  margin: 0px 0px 32.39px 0px;
 
   .image {
-    width: 4.9375rem;
-    height: 5rem;
-    object-fit: cover;
+    width: 7.9375rem;
+    height: 7rem;
+    object-fit: contain;
   }
 `;
 
 const Image = styled.img`
   width: 610px;
   object-fit: contain;
-  height: 32em;
+  height: 32rem;
 `;
