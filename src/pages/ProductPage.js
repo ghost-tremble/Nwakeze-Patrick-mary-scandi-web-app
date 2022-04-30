@@ -20,6 +20,7 @@ class ProductPage extends Component {
     this.state = {
       index: 0,
       errorString: '',
+      error: '',
       selectedAttributes: {},
       isLoading: true,
     };
@@ -36,6 +37,15 @@ class ProductPage extends Component {
         this.props.fetchSingleProduct(
           result.data
         );
+
+        if (result.data.product === null) {
+          return this.setState((prevState) => ({
+            ...prevState,
+            isLoading: false,
+            error:
+              'Error 404 page does not exist',
+          }));
+        }
         this.setState((prevState) => ({
           ...prevState,
           isLoading: false,
@@ -45,8 +55,8 @@ class ProductPage extends Component {
   render() {
     // product
     const { product } = this.props.product;
-    const { isLoading } = this.state;
-    console.log(product);
+    const { isLoading, error } = this.state;
+
     const { addItemToCart } = this.props;
 
     return (
@@ -54,217 +64,237 @@ class ProductPage extends Component {
         {isLoading ? (
           <Loader />
         ) : (
-          <Container>
-            {this.state.errorString ? (
-              <ErrorBar
-                errorString={
-                  this.state.errorString
-                }
-              />
+          <>
+            {error ? (
+              <ErrorBar errorString={error} />
             ) : (
-              ''
-            )}
-            <Section
-              marginRight={'20px'}
-              width={''}
-              scroll="auto"
-              overflow="hidden"
-              height="31rem">
-              {product.gallery.map(
-                (item, index) => {
-                  return (
-                    <SelectImage
-                      key={index}
-                      onClick={() =>
-                        this.setState({
-                          ...this.state,
-                          index: index,
-                        })
-                      }>
-                      <img
-                        src={item}
-                        className="image"
-                        alt="product"
-                      />
-                    </SelectImage>
-                  );
-                }
-              )}
-            </Section>
-            <Section
-              marginRight={'100px'}
-              width={'610px'}
-              background="#fff">
-              <Image
-                src={
-                  product.gallery[
-                    this.state.index
-                  ]
-                }
-              />
-            </Section>
-            <Section
-              marginRight={'20px'}
-              width={'292px'}>
-              <div className="productName">
-                <h2>{product.brand}</h2>
-                <p>{product.name}</p>
-              </div>
+              <Container>
+                {this.state.errorString ? (
+                  <ErrorBar
+                    errorString={
+                      this.state.errorString
+                    }
+                  />
+                ) : (
+                  ''
+                )}
+                <Section
+                  marginRight={'20px'}
+                  width={''}
+                  scroll="auto"
+                  overflow="hidden"
+                  height="31rem">
+                  {product.gallery.map(
+                    (item, index) => {
+                      return (
+                        <SelectImage
+                          key={index}
+                          onClick={() =>
+                            this.setState({
+                              ...this.state,
+                              index: index,
+                            })
+                          }>
+                          <img
+                            src={item}
+                            className="image"
+                            alt="product"
+                          />
+                        </SelectImage>
+                      );
+                    }
+                  )}
+                </Section>
+                <Section
+                  marginRight={'100px'}
+                  width={'610px'}
+                  background="#fff">
+                  <Image
+                    src={
+                      product.gallery[
+                        this.state.index
+                      ]
+                    }
+                  />
+                </Section>
+                <Section
+                  marginRight={'20px'}
+                  width={'292px'}>
+                  <div className="productName">
+                    <h2>{product.brand}</h2>
+                    <p>{product.name}</p>
+                  </div>
 
-              {/*
+                  {/*
           product attributes selection */}
-              {product.attributes.map(
-                (attr, index) => {
-                  return (
-                    <div
-                      key={index}
-                      className="attribute-selection">
-                      <h3>{attr.name}</h3>
+                  {product.attributes.map(
+                    (attr, index) => {
+                      return (
+                        <div
+                          key={index}
+                          className="attribute-selection">
+                          <h3>{attr.name}</h3>
 
-                      <div className="box-container">
-                        {attr.items.map(
-                          (attribute, index) => {
-                            return (
-                              <div key={index}>
-                                {attr.type ===
-                                'swatch' ? (
-                                  <Div
-                                    key={index}
-                                    $highlight={
-                                      this.state
-                                        .selectedAttributes[
-                                        attr.name
-                                      ] ===
-                                      attribute.value
-                                        ? true
-                                        : false
-                                    }>
-                                    <Box
-                                      cursor="pointer"
-                                      border="none"
-                                      background={
-                                        attribute.value
-                                      }
-                                      height="32px"
-                                      width="32px"
-                                      marginRight="0px"
-                                      onClick={() => {
-                                        this.setState(
-                                          {
-                                            ...this
-                                              .state,
-                                            selectedAttributes:
+                          <div className="box-container">
+                            {attr.items.map(
+                              (
+                                attribute,
+                                index
+                              ) => {
+                                return (
+                                  <div
+                                    key={index}>
+                                    {attr.type ===
+                                    'swatch' ? (
+                                      <Div
+                                        key={
+                                          index
+                                        }
+                                        $highlight={
+                                          this
+                                            .state
+                                            .selectedAttributes[
+                                            attr
+                                              .name
+                                          ] ===
+                                          attribute.value
+                                            ? true
+                                            : false
+                                        }>
+                                        <Box
+                                          cursor="pointer"
+                                          border="none"
+                                          background={
+                                            attribute.value
+                                          }
+                                          height="32px"
+                                          width="32px"
+                                          marginRight="0px"
+                                          onClick={() => {
+                                            this.setState(
                                               {
                                                 ...this
-                                                  .state
-                                                  .selectedAttributes,
+                                                  .state,
+                                                selectedAttributes:
+                                                  {
+                                                    ...this
+                                                      .state
+                                                      .selectedAttributes,
 
-                                                [attr.name]:
-                                                  attribute.value,
-                                              },
-                                          }
-                                        );
-                                      }}></Box>
-                                  </Div>
-                                ) : (
-                                  <Box
-                                    cursor="pointer"
-                                    onClick={() =>
-                                      this.setState(
-                                        {
-                                          ...this
-                                            .state,
-                                          selectedAttributes:
+                                                    [attr.name]:
+                                                      attribute.value,
+                                                  },
+                                              }
+                                            );
+                                          }}></Box>
+                                      </Div>
+                                    ) : (
+                                      <Box
+                                        cursor="pointer"
+                                        onClick={() =>
+                                          this.setState(
                                             {
                                               ...this
-                                                .state
-                                                .selectedAttributes,
+                                                .state,
+                                              selectedAttributes:
+                                                {
+                                                  ...this
+                                                    .state
+                                                    .selectedAttributes,
 
-                                              [attr.name]:
-                                                attribute.value,
-                                            },
+                                                  [attr.name]:
+                                                    attribute.value,
+                                                },
+                                            }
+                                          )
                                         }
-                                      )
-                                    }
-                                    key={index}
-                                    $selected={
-                                      this.state
-                                        .selectedAttributes[
-                                        attr.name
-                                      ] ===
-                                      attribute.value
-                                        ? true
-                                        : false
-                                    }>
-                                    {
-                                      attribute.value
-                                    }
-                                  </Box>
-                                )}
-                              </div>
-                            );
-                          }
-                        )}
-                      </div>
-                    </div>
-                  );
-                }
-              )}
-
-              <div className="price">
-                <h3>PRICE:</h3>
-
-                <h4>
-                  {getCurrentCurrency(
-                    product.prices,
-                    this.props.currentCurrency
+                                        key={
+                                          index
+                                        }
+                                        $selected={
+                                          this
+                                            .state
+                                            .selectedAttributes[
+                                            attr
+                                              .name
+                                          ] ===
+                                          attribute.value
+                                            ? true
+                                            : false
+                                        }>
+                                        {
+                                          attribute.value
+                                        }
+                                      </Box>
+                                    )}
+                                  </div>
+                                );
+                              }
+                            )}
+                          </div>
+                        </div>
+                      );
+                    }
                   )}
-                </h4>
-              </div>
-              <Button
-                color="#ffffff"
-                background="#5ECE7B"
-                width="292px"
-                height="52px"
-                onClick={() => {
-                  if (product.inStock === false) {
-                    return this.setState({
-                      ...this.state,
-                      errorString:
-                        'this product is out of stock',
-                    });
-                  }
-                  if (
-                    Object.keys(
-                      this.state
-                        .selectedAttributes
-                    ).length !==
-                    product.attributes.length
-                  ) {
-                    return this.setState({
-                      ...this.state,
-                      errorString:
-                        'please select Attributes',
-                    });
-                  }
-                  this.setState({
-                    ...this.state,
-                    errorString: '',
-                  });
-                  addItemToCart({
-                    ...product,
-                    selectedAttributes:
-                      this.state
-                        .selectedAttributes,
-                  });
-                }}>
-                ADD TO CART
-              </Button>
-              <div className="description">
-                {parse(product.description)}
-              </div>
-            </Section>
-          </Container>
+
+                  <div className="price">
+                    <h3>PRICE:</h3>
+
+                    <h4>
+                      {getCurrentCurrency(
+                        product.prices,
+                        this.props.currentCurrency
+                      )}
+                    </h4>
+                  </div>
+                  <Button
+                    color="#ffffff"
+                    background="#5ECE7B"
+                    width="292px"
+                    height="52px"
+                    onClick={() => {
+                      if (
+                        product.inStock === false
+                      ) {
+                        return this.setState({
+                          ...this.state,
+                          errorString:
+                            'this product is out of stock',
+                        });
+                      }
+                      if (
+                        Object.keys(
+                          this.state
+                            .selectedAttributes
+                        ).length !==
+                        product.attributes.length
+                      ) {
+                        return this.setState({
+                          ...this.state,
+                          errorString:
+                            'please select Attributes',
+                        });
+                      }
+                      this.setState({
+                        ...this.state,
+                        errorString: '',
+                      });
+                      addItemToCart({
+                        ...product,
+                        selectedAttributes:
+                          this.state
+                            .selectedAttributes,
+                      });
+                    }}>
+                    ADD TO CART
+                  </Button>
+                  <div className="description">
+                    {parse(product.description)}
+                  </div>
+                </Section>
+              </Container>
+            )}
+          </>
         )}
       </>
     );

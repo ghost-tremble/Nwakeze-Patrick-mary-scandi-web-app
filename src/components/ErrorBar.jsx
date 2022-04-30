@@ -13,14 +13,15 @@ class ErrorBar extends Component {
 export default ErrorBar;
 
 const Container = styled.div`
-  position: absolute;
+  position: fixed;
   width: 100%;
   height: 50px;
   display: flex;
   top: 82px;
   align-items: center;
   justify-content: center;
-  background-color: #5ece7b;
+  background-color: red;
+
   h3 {
     font-family: Raleway;
     font-size: 24px;
