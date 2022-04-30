@@ -1,6 +1,5 @@
 import { Component, createRef } from 'react';
 import { Link } from 'react-router-dom';
-import { closeOnClickOut } from '../utils/closeOnClickOut';
 import { createStructuredSelector } from 'reselect';
 import styled from 'styled-components';
 import { ReactComponent as LogoImage } from '../assets/headerIcons/shop-logo.svg';
@@ -18,15 +17,27 @@ import { selectCartItemsCount } from '../redux/reducers/cart/cart.selector';
 import Cart from './cart/Cart';
 
 class Header extends Component {
-  constructor(props) {
-    super(props);
-    this.wrapperRef = createRef(null);
-  }
-
+  wrapperRef = createRef(null);
+  handleClickOutside = (event) => {
+    if (
+      this.wrapperRef.current &&
+      !this.wrapperRef.current.contains(
+        event.target
+      )
+    ) {
+      this.props.closeCartOnClickOut();
+    }
+  };
   componentDidMount() {
-    closeOnClickOut(
-      this.wrapperRef,
-      this.props.closeCartOnClickOut
+    document.addEventListener(
+      'mousedown',
+      this.handleClickOutside
+    );
+  }
+  componentWillUnmount() {
+    document.removeEventListener(
+      'mousedown',
+      this.handleClickOutside
     );
   }
   render() {

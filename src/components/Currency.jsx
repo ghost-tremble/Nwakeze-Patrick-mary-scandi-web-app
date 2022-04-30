@@ -1,6 +1,5 @@
 import { Component, createRef } from 'react';
 import { connect } from 'react-redux';
-import { closeOnClickOut } from '../utils/closeOnClickOut';
 
 import styled from 'styled-components';
 import {
@@ -9,15 +8,27 @@ import {
   closeCurrenciesOnClickOut,
 } from '../redux/reducers/currency/currency.action';
 class Currency extends Component {
-  constructor(props) {
-    super(props);
-    this.wrapperRef = createRef(null);
-  }
-
+  wrapperRef = createRef(null);
+  handleClickOutside = (event) => {
+    if (
+      this.wrapperRef.current &&
+      !this.wrapperRef.current.contains(
+        event.target
+      )
+    ) {
+      this.props.closeCurrencyOnClickOut();
+    }
+  };
   componentDidMount() {
-    closeOnClickOut(
-      this.wrapperRef,
-      this.props.closeCurrencyOnClickOut
+    document.addEventListener(
+      'mousedown',
+      this.handleClickOutside
+    );
+  }
+  componentWillUnmount() {
+    document.removeEventListener(
+      'mousedown',
+      this.handleClickOutside
     );
   }
   render() {
