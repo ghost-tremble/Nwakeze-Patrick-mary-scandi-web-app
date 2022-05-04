@@ -4,11 +4,14 @@ import { connect } from 'react-redux';
 import { ReactComponent as ShopLogo } from '../assets/headerIcons/shop-logo.svg';
 class Loader extends Component {
   render() {
-    const { errorString } = this.props;
+    const { errorString, errorFromState } =
+      this.props;
     return (
       <Container>
         <ShopLogo />
-        <ErrorString>{errorString}</ErrorString>
+        <ErrorString>
+          {errorString || errorFromState}
+        </ErrorString>
       </Container>
     );
   }

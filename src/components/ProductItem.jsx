@@ -1,23 +1,39 @@
 import { Component } from 'react';
 import styled from 'styled-components';
+import { getPredefinedAttributes } from '../utils/getPredefinedAttributes';
 import { connect } from 'react-redux';
 import { ReactComponent as CartIcon } from '../assets/add-cart.svg';
 import { getCurrentCurrency } from '../utils/getCurrentCurrency';
 import { addItem } from '../redux/reducers/cart/cart.actions';
 import { withRouter } from 'react-router-dom';
+import ErrorBar from './ErrorBar';
 // single Product Item
 class ProductItem extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      errorString: '',
+    };
+  }
   render() {
-    const { history } = this.props;
     const {
+      history,
       name,
       image,
       stock,
       productLink,
       prices,
+      addItemToCart,
+      item,
     } = this.props;
+
     return (
       <>
+        {this.state.errorString ? (
+          <ErrorBar
+            errorString={this.state.errorString}
+          />
+        ) : null}
         <Container
           onClick={() =>
             history.push(productLink)
@@ -37,7 +53,25 @@ class ProductItem extends Component {
           </div>
 
           <div className="addToCart">
-            <AddCart>
+            <AddCart
+              onClick={(e) => {
+                e.stopPropagation();
+                if (stock === false) {
+                  return this.setState({
+                    ...this.state,
+                    errorString:
+                      'this product is out of stock',
+                  });
+                }
+                addItemToCart({
+                  ...item,
+                  selectedAttributes: {
+                    ...getPredefinedAttributes(
+                      item
+                    ),
+                  },
+                });
+              }}>
               <CartIcon />
             </AddCart>
           </div>
