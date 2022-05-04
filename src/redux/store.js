@@ -9,7 +9,7 @@ import { persistStore } from 'redux-persist';
 
 const middlewares = [logger, thunk]; //middlewares
 
-// apply logger and redux-thunl
+// apply logger and redux-thunk
 
 const store = createStore(
   rootReducer,

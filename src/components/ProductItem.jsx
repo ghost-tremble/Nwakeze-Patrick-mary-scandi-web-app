@@ -56,11 +56,16 @@ class ProductItem extends Component {
             <AddCart
               onClick={(e) => {
                 e.stopPropagation();
-                if (stock === false) {
+                try {
+                  if (stock === false) {
+                    throw new Error(
+                      'this Product is out out of stock'
+                    );
+                  }
+                } catch (e) {
                   return this.setState({
                     ...this.state,
-                    errorString:
-                      'this product is out of stock',
+                    errorString: e.message,
                   });
                 }
                 addItemToCart({

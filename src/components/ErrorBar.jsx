@@ -34,6 +34,7 @@ const Container = styled.div`
   width: 100%;
   height: 50px;
   display: none;
+  z-index: 10;
   top: 82px;
   left: 0;
   align-items: center;
