@@ -1,5 +1,6 @@
 import { PureComponent } from 'react';
 import { connect } from 'react-redux';
+import styled from 'styled-components';
 import {
   BrowserRouter as Router,
   Route,
@@ -26,17 +27,11 @@ class App extends PureComponent {
         ) : (
           <Router>
             <Route>
-              <div
-                style={{
-                  position: 'fixed',
-                  width: '100%',
-                  top: '0',
-                  zIndex: '100',
-                }}>
+              <Container>
                 <Header />
                 <CartOverLay />
                 <Currency />
-              </div>
+              </Container>
             </Route>
             <Switch>
               {/* create route from category items */}
@@ -82,3 +77,10 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps)(App);
+
+const Container = styled.div`
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 100;
+`;
