@@ -1,11 +1,7 @@
 import { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-} from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { Redirect } from 'react-router-dom';
 import Category from './components/Category';
 // import HomePage from './pages/Home';
@@ -25,14 +21,13 @@ class App extends PureComponent {
         {isLoading ? (
           <Loader />
         ) : (
-          <Router>
-            <Route>
-              <Container>
-                <Header />
-                <CartOverLay />
-                <Currency />
-              </Container>
-            </Route>
+          <>
+            <Container>
+              <Header />
+              <CartOverLay />
+              <Currency />
+            </Container>
+
             <Switch>
               {/* create route from category items */}
               <Route exact path="/">
@@ -63,7 +58,7 @@ class App extends PureComponent {
                 <CartPage />
               </Route>
             </Switch>
-          </Router>
+          </>
         )}
       </>
     );

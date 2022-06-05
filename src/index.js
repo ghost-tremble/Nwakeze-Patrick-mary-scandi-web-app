@@ -21,6 +21,7 @@ import {
 } from './Theme.config';
 import client from './graphql/client';
 import { fetchCurrecies } from './redux/reducers/currency/currency.action';
+import { BrowserRouter } from 'react-router-dom';
 
 // graphql queries
 const c = client
@@ -57,9 +58,11 @@ ReactDOM.render(
     <Provider store={store}>
       <ThemeProvider theme={lightTheme}>
         <GlobalStyles />
+        <BrowserRouter>
         <PersistGate persistor={savedStore}>
           <App />
         </PersistGate>
+        </BrowserRouter>
       </ThemeProvider>
     </Provider>
   </React.StrictMode>,
